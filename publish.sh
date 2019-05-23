@@ -2,8 +2,10 @@
 
 set -e # Bail on first error
 
-DIST=dist-`date +"%Y-%m-%d-%H%M%S"`.zip
-DEPLOY=deploy-`date +"%Y-%m-%d-%H%M%S"`.sh
+DIST_ZIP=dist-`date +"%Y-%m-%d-%H%M%S"`.zip
+DEPLOY_SCRIPT=deploy-`date +"%Y-%m-%d-%H%M%S"`.sh
+BACKUP_DATE=`date +"%Y-%m-%d-%H%M%S"`
+SITENAME="genguid.com"
 
 echo "#"
 echo "# Formatting files"
@@ -12,7 +14,7 @@ echo "#"
 npm run format
 
 echo "#"
-echo "# Zipping distribution & creating scripts"
+echo "# Creating distribution"
 echo "#"
 
 rm -rf dist
@@ -24,31 +26,37 @@ cp -r \
     src/favicon.ico \
     src/webfonts \
     dist
-cd dist
-zip -r $DIST ./
 
-cat <<EOF > $DEPLOY
-rm -r "/root/websites/genguid.com/"*
-cd "/root/websites/genguid.com"
-unzip "/root/downloads/$DIST"
-chown -R www-data:www-data .
-rm "/root/downloads/$DIST"
-rm "/root/downloads/$DEPLOY"
-EOF
+echo "#"
+echo "# Zipping distribution & creating scripts"
+echo "#"
+
+cd dist
+zip -r $DIST_ZIP ./
+
+echo "" > $DEPLOY_SCRIPT
+echo "mv \"/home/ubuntu/sites/"$SITENAME"/\" \"/home/ubuntu/sites_backup/"$BACKUP_DATE"_"$SITENAME"\"" >> $DEPLOY_SCRIPT
+echo "mkdir \"/home/ubuntu/sites/"$SITENAME"\"" >> $DEPLOY_SCRIPT
+echo "cd \"/home/ubuntu/sites/"$SITENAME"\"" >> $DEPLOY_SCRIPT
+echo "unzip \"/home/ubuntu/downloads/$DIST_ZIP\"" >> $DEPLOY_SCRIPT
+echo "sudo chown -R www-data:www-data ." >> $DEPLOY_SCRIPT
+echo "sudo chown www-data:ubuntu ." >> $DEPLOY_SCRIPT
+echo "rm \"/home/ubuntu/downloads/$DIST_ZIP\"" >> $DEPLOY_SCRIPT
+echo "rm \"/home/ubuntu/downloads/$DEPLOY_SCRIPT\"" >> $DEPLOY_SCRIPT
 
 echo "#"
 echo "# Uploading files"
 echo "#"
 
-scp $DIST $DEPLOY root@jorisweb.com:downloads/
-ssh root@jorisweb.com chmod +x downloads/$DEPLOY
+scp $DIST_ZIP $DEPLOY_SCRIPT jorisweb.com:downloads/
+ssh jorisweb.com chmod +x downloads/$DEPLOY_SCRIPT
 
 echo "#"
 echo "# Executing remote script"
 echo "#"
 
-cat $DEPLOY
-ssh root@jorisweb.com downloads/$DEPLOY
+cat $DEPLOY_SCRIPT
+ssh jorisweb.com downloads/$DEPLOY_SCRIPT
 
 echo "#"
 echo "# Cleaning up"

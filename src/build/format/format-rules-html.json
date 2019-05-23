@@ -1,0 +1,46 @@
+{
+    "allow_empty_files": true,
+    "block_elements": [
+        "tg-icon"
+    ],
+    "definition_type": "HTML",
+    "format_multi_classes_with_at_least": 3,
+    "inline_elements": [],
+    "line_ending": "\r\n",
+    "convert_line_endings": true,
+    "multi_classes_order": [
+        "^o-.*$",
+        "^h-.*$",
+        "^tm-.*$",
+        "^mp-.*$",
+        "^jb-.*$",
+        "^pt-.*$",
+        "^mt-.*$",
+        ".*"
+    ],
+    "remove_css": true,
+    "ng_version": 2,
+    "ng_attributes_order": [
+        "sm.*",
+        "sd.*",
+        "md.*",
+        "mg.*",
+        "lg.*",
+        "ll.*",
+        "xl.*"
+    ],
+    "ng_attributes_order_pre_native": [
+        "\\*.*",
+        "\\#.*",
+        "\\[\\(.*\\)\\]",
+        "\\(.*\\)",
+        "\\[sm.*\\]",
+        "\\[sd.*\\]",
+        "\\[md.*\\]",
+        "\\[mg.*\\]",
+        "\\[lg.*\\]",
+        "\\[ll.*\\]",
+        "\\[xl.*\\]",
+        "\\[.*\\]"
+    ]
+}

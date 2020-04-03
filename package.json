@@ -1,16 +1,14 @@
 {
   "devDependencies": {
     "color-print": "^1.0.2",
-    "minimist": "^1.2.2",
-    "toris-format": "^1.7.11"
+    "minimist": "^1.2.5",
+    "toris-format": "^1.7.13"
   },
   "license": "MIT",
   "name": "genguid",
   "scripts": {
-    "e2e": "ng e2e",
     "format": "node src/build/format/format.js",
-    "lint": "ng lint",
-    "test": "ng test"
+    "serve": "http-server -p 8000 src/"
   },
   "version": "1.0.0"
 }

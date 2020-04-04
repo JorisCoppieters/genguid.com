@@ -133,12 +133,18 @@ input#guid {
 }
 
 div#testimonials {
-    background: -moz-linear-gradient(left, #4c4b4b 0%, #949494 50%, #949494 50%, #4c4b4b 100%);
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#4c4b4b),color-stop(50%,#949494), color-stop(50%,#949494), color-stop(100%,#4c4b4b));
+    background: -moz-linear-gradient(
+        left,
+        #4c4b4b 0%,
+        #949494 50%,
+        #949494 50%,
+        #4c4b4b 100%
+    );
+    background: -webkit-gradient(linear,left top,right top, color-stop(0%, #4c4b4b), color-stop(50%, #949494), color-stop(50%, #949494), color-stop(100%, #4c4b4b));
     margin: 100px auto 0 auto;
     text-align: center;
     border: 5px solid #4c4b4b;
-    font-family: Georiga;
+    font-family: Georgia;
     color: #afafaf;
 }
 
@@ -161,9 +167,22 @@ div#testimonials ul {
     padding: 0;
 }
 
-
-div#testimonials .testimonial:before {content: '“';font-size: 100pt;float: left;height: 0px;position: relative;top: -20px;}
-div#testimonials .testimonial:after {content: '”';font-size: 100pt;float: right;height: 0px;position: relative;bottom: 80px;}
+div#testimonials .testimonial:before {
+    content: '“';
+    font-size: 100pt;
+    float: left;
+    height: 0px;
+    position: relative;
+    top: -20px;
+}
+div#testimonials .testimonial:after {
+    content: '”';
+    font-size: 100pt;
+    float: right;
+    height: 0px;
+    position: relative;
+    bottom: 80px;
+}
 
 div#testimonials .testimonial {
     display: inline-block;
@@ -179,18 +198,21 @@ div#testimonials .testimonial p.content {
     display: block;
     padding: 60px 20px 0px 20px;
     margin: 0;
-    font-family: Georgia;
     color: #a5a5a5;
     font-style: italic;
 }
 
-div#testimonials .testimonial p.author:before {content: ' - ';font-size: 20pt;position: relative;top: 2px;}
+div#testimonials .testimonial p.author:before {
+    content: ' - ';
+    font-size: 20pt;
+    position: relative;
+    top: 2px;
+}
 
 div#testimonials .testimonial p.author {
     display: block;
     padding: 0px 20px 60px 20px;
     margin: 0;
-    font-family: Georgia;
     font-style: italic;
 }
 
@@ -212,15 +234,13 @@ div.footer {
 }
 
 div.footer p {
-
-display: inline-block;
-padding: 0 5px;
+    display: inline-block;
+    padding: 0 5px;
 }
 
 div.footer p.link {
-
-position:relative;
-top: 1px;
+    position: relative;
+    top: 1px;
 }
 div.footer a {
     font-style: none;

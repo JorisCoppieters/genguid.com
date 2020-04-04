@@ -46,13 +46,15 @@
         ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
-    <body>
+    <body
+        class="noselect">
         <div
             class="input">
             <p
                 class="help"><i
                     class="fa-info-circle fas"></i> The GUID is automatically copied to your clipboard</p>
             <input
+                class="noselect"
                 id="guid"
                 onclick="selectGuid()"
                 readonly
@@ -61,10 +63,16 @@
                 class="btn"
                 id="generate_random_guid"
                 onclick="setRandomGuid()"
-                type="button">Generate New</button>
+                type="button">Generate</button>
+        </div>
+        <div
+            class="copied"
+            id="copied">
+            <span
+                class="copied-message">Copied</span>
         </div>
         <script
             src="/script.js"></script>
-        <script>setRandomGuid();</script>
+        <script>init();</script>
     </body>
 </html>

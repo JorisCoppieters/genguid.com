@@ -8,6 +8,9 @@
         <meta
             content="GUID, generate, online, free"
             name="keywords">
+        <meta
+            content="width=device-width, initial-scale=1.0"
+            name="viewport">
         <title>Generate GUID</title>
         <link
             href="/favicon.ico"
@@ -50,26 +53,30 @@
         class="noselect">
         <div
             class="input">
-            <p
-                class="help"><i
-                    class="fa-info-circle fas"></i> The GUID is automatically copied to your clipboard</p>
             <input
                 class="noselect"
                 id="guid"
                 onclick="selectGuid()"
                 readonly
                 type="text">
-            <button
-                class="btn"
-                id="generate_random_guid"
-                onclick="setRandomGuid()"
-                type="button">Generate</button>
-        </div>
-        <div
-            class="copied"
-            id="copied">
-            <span
-                class="copied-message">Copied</span>
+            <div
+                class="copied"
+                id="copied">
+                <span
+                    class="copied-message">Copied</span>
+            </div>
+            <div
+                class="panel">
+                <button
+                    class="btn"
+                    id="generate_random_guid"
+                    onclick="setRandomGuid()"
+                    type="button">Generate
+                </button>
+                <p
+                    class="help"><i
+                        class="fa-info-circle fas"></i>The GUID will be copied to your clipboard</p>
+            </div>
         </div>
         <div
             id="testimonials">

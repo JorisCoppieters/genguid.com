@@ -2,9 +2,10 @@
 
 set -e # Bail on first error
 
-DIST_ZIP=dist-`date +"%Y-%m-%d-%H%M%S"`.zip
-DEPLOY_SCRIPT=deploy-`date +"%Y-%m-%d-%H%M%S"`.sh
-BACKUP_DATE=`date +"%Y-%m-%d-%H%M%S"`
+DATE_STAMP=`date +"%Y-%m-%d-%H%M%S"`
+DIST_ZIP="dist-$DATE_STAMP.zip"
+DEPLOY_SCRIPT="deploy-$DATE_STAMP.sh"
+BACKUP_DATE="$DATE_STAMP"
 SITENAME="genguid.com"
 
 echo "#"
@@ -12,6 +13,8 @@ echo "# Formatting files"
 echo "#"
 
 npm run format
+cp src/index.html src/index.html.bak
+cat src/index.html.bak | sed 's/href="\(\/.*\)"/href="\1?'$DATE_STAMP'"/g' > src/index.html;
 
 echo "#"
 echo "# Creating distribution"
@@ -64,3 +67,4 @@ echo "#"
 
 cd ../
 rm -r dist
+mv src/index.html.bak src/index.html

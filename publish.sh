@@ -28,6 +28,8 @@ cp -r \
     src/*.js \
     src/favicon.ico \
     src/webfonts \
+    sitemap.xml \
+    robots.txt \
     dist
 
 echo "#"

@@ -1,21 +1,12 @@
 var copiedTimeout = null;
-const getGuid = () => {
+function getGuid () {
     const s4 = () => Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 };
-const selectGuid = () => {
-    copyGuid();
-};
-const setRandomGuid = () => {
-    const guid = getGuid().toUpperCase();
-    document.getElementById('guid').value = guid;
-    setTimeout(() => {
-        copyGuid();
-    }, 200);
-}
-const copyGuid = () => {
-    document.getElementById('guid').focus();
-    document.getElementById('guid').select();
+function copyGuid () {
+    const element = document.getElementById('guid');
+    element.focus();
+    element.select();
     if (!document.execCommand('copy')) {
         console.error('Failed to copy GUID!');
     }
@@ -29,6 +20,26 @@ const copyGuid = () => {
         document.getElementById('copied').className = '';
     }, 1000)
 }
-const init = () => {
-    document.getElementById('guid').value = '<CLICK GENERATE>';
+function setRandomGuid () {
+    const element = document.getElementById('guid');
+    const guid = getGuid().toUpperCase();
+    element.value = guid;
+}
+function showHelp () {
+    const element = document.getElementById('help');
+    element.style = "display: inline-block";
+}
+function selectGuid () {
+    copyGuid();
+};
+function newGuid () {
+    showHelp();
+    setRandomGuid();
+    setTimeout(() => {
+        copyGuid();
+    }, 100);
+};
+
+function init () {
+    setRandomGuid();
 }

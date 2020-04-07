@@ -13,6 +13,12 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+div.help-wrap {
+    position: relative;
+    top: -21px;
+    height: 0;
+    display: none;
+}
 p.help {
     font-weight: normal;
     text-align: center;
@@ -20,13 +26,9 @@ p.help {
     font-family: Consolas;
     color: #ffffff;
     background: #184c9c;
-    display: inline-block;
     border-radius: 6px;
-    padding: 4px 14px 3px 4px;
-    margin: 0px 0 0 22px;
-    top: -41px;
-    left: -62px;
-    position: relative;
+    padding: 4px 14px 3px 14px;
+    margin: 0;
 }
 p.help i {
     top: 1px;
@@ -60,7 +62,6 @@ input#guid {
     display: inline-block;
     padding: 0.35em 1.2em;
     border: 0.1em solid #FFFFFF;
-    margin: 0 0.3em 0.3em 0;
     border-radius: 0.12em;
     box-sizing: border-box;
     text-decoration: none;
@@ -83,7 +84,8 @@ input#guid {
 
 .panel {
     display: inline-block;
-    margin-top: 5px;
+    margin: 20px 0 10px 0;
+    width: 100%;
 }
 
 #copied {
@@ -219,9 +221,16 @@ div.footer a {
 }
 
 /* Use a media query to add a breakpoint at 800px: */
+@media screen and (max-width: 1000px) {
+    input#guid {
+        font-size: 30px;
+    }
+}
+
+/* Use a media query to add a breakpoint at 800px: */
 @media screen and (max-width: 800px) {
     input#guid {
-        font-size: 14px;
+        font-size: 18px;
         height: 50px;
         width: 100%;
     }

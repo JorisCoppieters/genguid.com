@@ -31,7 +31,7 @@ echo ""
 
 npm run format
 cp src/index.html src/index.html.bak
-cat src/index.html.bak | sed 's/href="\(\/.*\)"/href="\1?'$DATE_STAMP'"/g' > src/index.html;
+cat src/index.html.bak | sed 's/href="\(\/.*\)"/href="\1?'$CURRENT_DATE_STAMP'"/g' > src/index.html;
 
 echo ""
 echo "#"

@@ -1,13 +1,15 @@
 {
   "devDependencies": {
     "color-print": "^1.0.2",
+    "cross-env": "^7.0.2",
     "minimist": "^1.2.5",
     "toris-format": "^1.7.13"
   },
   "license": "MIT",
-  "name": "genguid",
+  "name": "genguid.com",
   "scripts": {
-    "format": "node src/build/format/format.js",
+    "format": "node ./build/format/format.js",
+    "publish": "cross-env ./build/scripts/publish.sh",
     "serve": "http-server -p 8000 src/"
   },
   "version": "1.0.0"

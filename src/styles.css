@@ -218,6 +218,7 @@ div.footer p.link {
 div.footer a {
     font-style: none;
     color: inherit;
+    text-decoration: none;
 }
 
 /* Use a media query to add a breakpoint at 800px: */

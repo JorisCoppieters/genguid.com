@@ -23,12 +23,6 @@ module.exports = merge(common, {
                     path.join(rootFolder, 'src/_common/css'),
                 ],
                 use: [
-                    // {
-                    //     loader: MiniCssExtractPlugin.loader,
-                    //     options: {
-                    //         publicPath: '/',
-                    //     },
-                    // },
                     {
                         loader: 'file-loader',
                         options: {

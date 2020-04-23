@@ -5,6 +5,11 @@ body {
     font-family: monospace;
 }
 
+.content {
+    text-align: center;
+    display: inline-block;
+}
+
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -189,38 +194,6 @@ div#testimonials .testimonial p.author {
     color: #575757;
 }
 
-div.footer {
-    background: #2b2b2b;
-    text-align: center;
-    position: fixed;
-    bottom: 0px;
-    margin: 0;
-    padding: 0;
-    display: block;
-    left: 0;
-    right: 0;
-    color: #F0F0F0;
-    font-size: 13pt;
-    font-family: Consolas;
-    letter-spacing: -1px;
-    font-weight: bold;
-}
-
-div.footer p {
-    display: inline-block;
-    padding: 0 5px;
-}
-
-div.footer p.link {
-    position: relative;
-    top: 1px;
-}
-div.footer a {
-    font-style: none;
-    color: inherit;
-    text-decoration: none;
-}
-
 /* Use a media query to add a breakpoint at 800px: */
 @media screen and (max-width: 1000px) {
     input#guid {
@@ -247,7 +220,7 @@ div.footer a {
 
     div#testimonials {
         font-size: 10pt;
-        margin: 20px auto 100px auto;
+        margin: 20px auto 0 auto;
     }
 
     div#testimonials .testimonial {

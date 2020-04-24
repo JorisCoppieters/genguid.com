@@ -38,6 +38,7 @@
     },
     "license": "MIT",
     "name": "genguid.com",
+    "description": "Generate GUIDs",
     "scripts": {
         "format": "node ./build/format/format.js",
         "publish": "cross-env ./build/scripts/publish.sh",

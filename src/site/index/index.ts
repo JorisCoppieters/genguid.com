@@ -1,4 +1,6 @@
 import './index.html';
+import '../../_assets/favicon/favicon.ico';
+import '../../_assets/favicon/favicon.png';
 
 import { v4 as uuidV4 } from 'uuid';
 

@@ -10,6 +10,21 @@ module.exports = {
     module: {
         rules: [
             {
+                test: [
+                    /robots.txt/,
+                    /sitemap.xml/
+                ],
+                include: path.join(rootFolder, 'src/site'),
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'images/[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
                 test: /\.(png|svg|jpg|gif)$/,
                 include: path.join(rootFolder, 'src/_assets/images'),
                 use: [

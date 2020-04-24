@@ -1,10 +1,13 @@
 import './index.html';
+import './robots.txt';
+import './sitemap.xml';
 import '../../_assets/favicon/favicon.ico';
 
 import { v4 as uuidV4 } from 'uuid';
+import { dbErr } from '../../_common/ts/system/print';
 
 class Index {
-    public copiedTimeout = null;
+    public copiedTimeout: any = null;
 
     constructor() {
         this.init();
@@ -21,16 +24,25 @@ class Index {
         element.focus();
         element.select();
         if (!document.execCommand('copy')) {
-            console.error('Failed to copy GUID!');
+            dbErr('Failed to copy GUID!');
         }
-        document.getSelection().removeAllRanges();
+        const selection = document.getSelection();
+        if (selection) {
+            selection.removeAllRanges();
+        }
 
-        document.getElementById('copied').className = 'show';
+        const copied = document.getElementById('copied');
+        if (copied) {
+            copied.className = 'show';
+        }
+
         if (this.copiedTimeout) {
             clearTimeout(this.copiedTimeout);
         }
         this.copiedTimeout = setTimeout(() => {
-            document.getElementById('copied').className = '';
+            if (copied) {
+                copied.className = '';
+            }
         }, 1000);
     }
 
@@ -66,4 +78,5 @@ class Index {
     }
 }
 
+// tslint:disable-next-line:no-unused-expression
 new Index();

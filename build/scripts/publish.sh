@@ -57,38 +57,42 @@ cp -r \
 replace_vars ./dist/site/http.conf
 replace_vars ./dist/site/https.conf
 
-echo ""
-echo "#"
-echo "# Zipping distribution & creating scripts"
-echo "#"
-echo ""
+if [[ $ENV != "dev" ]]; then
 
-cd dist/site
-zip -r $DIST_ZIP ./
-mv $DIST_ZIP ../
-cd ../
+  echo ""
+  echo "#"
+  echo "# Zipping distribution & creating scripts"
+  echo "#"
+  echo ""
 
-cp -r ../build/scripts/publish-remote.sh $REMOTE_SCRIPT
-replace_vars $REMOTE_SCRIPT
-chmod +x $REMOTE_SCRIPT
+  cd dist/site
+  zip -r $DIST_ZIP ./
+  mv $DIST_ZIP ../
+  cd ../
 
-echo ""
-echo "#"
-echo "# Executing remote script"
-echo "#"
-echo ""
+  cp -r ../build/scripts/publish-remote.sh $REMOTE_SCRIPT
+  replace_vars $REMOTE_SCRIPT
+  chmod +x $REMOTE_SCRIPT
 
-scp $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
-ssh jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
+  echo ""
+  echo "#"
+  echo "# Executing remote script"
+  echo "#"
+  echo ""
 
-cat $REMOTE_SCRIPT
-ssh jorisweb.com downloads/$REMOTE_SCRIPT
+  scp $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
+  ssh jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
 
-echo ""
-echo "#"
-echo "# Cleaning up"
-echo "#"
-echo ""
+  cat $REMOTE_SCRIPT
+  ssh jorisweb.com downloads/$REMOTE_SCRIPT
 
-cd ../
-rm -r dist
+  echo ""
+  echo "#"
+  echo "# Cleaning up"
+  echo "#"
+  echo ""
+
+  cd ../
+  rm -r dist
+
+fi

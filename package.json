@@ -4,6 +4,7 @@
         "md5": "^2.2.1",
         "uuid": "^7.0.3"
     },
+    "description": "Generate GUIDs",
     "devDependencies": {
         "@types/bluebird": "^3.5.30",
         "@types/body-parser": "^1.19.0",
@@ -12,6 +13,7 @@
         "@types/md5": "^2.2.0",
         "@types/node": "^13.13.2",
         "@types/request": "^2.48.4",
+        "@types/uuid": "^7.0.3",
         "@types/webpack": "^4.41.12",
         "@types/webpack-dev-middleware": "^3.7.0",
         "awesome-typescript-loader": "^5.2.1",
@@ -38,7 +40,6 @@
     },
     "license": "MIT",
     "name": "genguid.com",
-    "description": "Generate GUIDs",
     "scripts": {
         "format": "node ./build/format/format.js",
         "publish": "cross-env ./build/scripts/publish.sh",

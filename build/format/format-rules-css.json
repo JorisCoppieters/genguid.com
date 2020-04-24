@@ -7,5 +7,5 @@
         "-webkit-linear-gradient"
     ],
     "convert_line_endings": true,
-    "line_ending": "\r\n"
+    "line_ending": "\n"
 }

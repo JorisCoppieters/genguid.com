@@ -2,11 +2,11 @@
 // Constants:
 // ******************************
 
+export const HOST = "genguid.com";
 export const APP_NAME = 'Gen GUID';
 export const APP_NAME_VARIABLE = APP_NAME.replace(/[ _]/, '-').toLowerCase();
-
-export const SESSION_STORAGE_PREFIX = 'GenGuid';
-export const LOCAL_STORAGE_PREFIX = 'GenGuid';
+export const SESSION_STORAGE_PREFIX = APP_NAME_VARIABLE;
+export const LOCAL_STORAGE_PREFIX = APP_NAME_VARIABLE;
 
 // ******************************
 // Enums:

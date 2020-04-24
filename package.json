@@ -1,4 +1,10 @@
 {
+    "author": "Joris Coppieters",
+    "config": {
+        "dev_port": "4070",
+        "host": "genguid.com",
+        "service_name": ""
+    },
     "dependencies": {
         "color-print": "^1.0.2",
         "md5": "^2.2.1",
@@ -17,14 +23,13 @@
         "@types/webpack": "^4.41.12",
         "@types/webpack-dev-middleware": "^3.7.0",
         "awesome-typescript-loader": "^5.2.1",
-        "cross-env": "^7.0.2",
-        "css-loader": "^3.5.2",
+        "css-loader": "^3.5.3",
         "extract-loader": "^5.0.1",
         "file-loader": "^6.0.0",
         "fs-process": "^1.0.1",
         "html-loader": "^1.1.0",
         "mini-css-extract-plugin": "^0.9.0",
-        "node-sass": "^4.13.1",
+        "node-sass": "^4.14.0",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "sass-loader": "^8.0.2",
         "terser-webpack-plugin": "^2.3.5",
@@ -38,12 +43,14 @@
         "webpack-dev-middleware": "^3.7.2",
         "webpack-merge": "^4.2.2"
     },
-    "license": "MIT",
+    "homepage": "https://genguid.com",
+    "license": "LicenseRef-LICENSE",
     "name": "genguid.com",
     "scripts": {
+        "deploy": "",
         "format": "node ./build/format/format.js",
-        "publish": "cross-env ./build/scripts/publish.sh",
-        "serve": "bash ./build/scripts/watch-site.sh"
+        "publish": "bash ./build/scripts/publish.sh",
+        "serve": "bash ./build/scripts/serve.sh"
     },
     "version": "1.0.0"
 }

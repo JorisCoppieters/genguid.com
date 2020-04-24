@@ -14,16 +14,16 @@
         "linebreak-style": {
             "options": "LF"
         },
+        "no-any": {
+            "severity": "warning"
+        },
+        "no-var-requires": false,
         "variable-name": {
             "options": [
                 "allow-snake-case",
                 "require-const-for-all-caps",
                 "ban-keywords"
             ]
-        },
-        "no-var-requires": false,
-        "no-any": {
-            "severity": "warning"
         }
     },
     "rulesDirectory": []

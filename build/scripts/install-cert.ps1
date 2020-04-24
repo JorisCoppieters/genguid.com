@@ -1,6 +1,19 @@
+Param(
+    $certPath = $null,
+    $certName = $null
+)
+write-host $certPath
+write-host $certName
+
+if (-not $certPath) {
+    throw "`$certPath not set"
+}
+
+if (-not $certName) {
+    throw "`$certName not set"
+}
+
 $certStores = @("Cert:/LocalMachine/Root","Cert:/LocalMachine/CA","Cert:/LocalMachine/My","Cert:/CurrentUser/Root","Cert:/CurrentUser/CA","Cert:/CurrentUser/My")
-$certPath = "./src/_cert/dev.genguid.com.crt"
-$certName = "dev.genguid.com certificate"
 
 foreach ($certStore in $certStores) {
     $thumbprints = (Get-ChildItem "$certStore" | Where {$_.FriendlyName -match $certName}).Thumbprint

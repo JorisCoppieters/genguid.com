@@ -5,21 +5,18 @@ const rootFolder = path.join(__dirname, '../../../');
 
 module.exports = {
     entry: {
-        index: path.join(rootFolder, 'src/site/index/index.ts')
+        index: path.join(rootFolder, 'src/site/index/index.ts'),
     },
     module: {
         rules: [
             {
-                test: [
-                    /robots.txt/,
-                    /sitemap.xml/
-                ],
+                test: [/robots.txt/, /sitemap.xml/],
                 include: path.join(rootFolder, 'src/site'),
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'images/[name].[ext]',
+                            name: '[name].[ext]',
                         },
                     },
                 ],
@@ -87,7 +84,6 @@ module.exports = {
                         loader: 'awesome-typescript-loader',
                         options: {
                             configFileName: path.join(rootFolder, './tsconfig.json'),
-                            name: '[name][hash].[ext]',
                         },
                     },
                 ],

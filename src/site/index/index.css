@@ -5,9 +5,9 @@ body {
     font-family: monospace;
 }
 
-.content {
+div.content {
     text-align: center;
-    display: inline-block;
+    width: 100%;
 }
 
 .noselect {

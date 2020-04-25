@@ -5,7 +5,8 @@
 import './index.html';
 import './robots.txt';
 import './sitemap.xml';
-import '../../_assets/favicon/favicon.ico';
+import '../../_common/ts/browser/imports/fonts';
+import '../../_common/ts/browser/imports/favicons';
 
 // ******************************
 

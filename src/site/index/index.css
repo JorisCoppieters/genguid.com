@@ -124,7 +124,7 @@ div#testimonials {
         #4c4b4b 100%
     );
     background: -webkit-gradient(linear,left top,right top, color-stop(0%, #3e3e3e), color-stop(50%, #6f6f6f), color-stop(50%, #6f6f6f), color-stop(100%, #3e3e3e));
-    margin: 100px auto 100px auto;
+    margin: 100px auto 0 auto;
     padding: 20px 0px;
     text-align: center;
     font-family: Georgia;

@@ -78,9 +78,10 @@ if [[ -f $HOSTS_FILE ]]; then
     set +e
     CUR_IP=$(cat "$HOSTS_FILE" 2>/dev/null | grep " $DEV_HOST")
     set -e
+
     if [[ ! $CUR_IP ]]; then
         if [[ $IS_MAC ]]; then
-          sudo chmod g+w "$HOSTS_FILE"
+            sudo chmod g+w "$HOSTS_FILE"
         fi
 
         echo "Adding host file entry..."
@@ -88,13 +89,12 @@ if [[ -f $HOSTS_FILE ]]; then
 
     elif [[ $CUR_IP != "$LOCALHOST_IP $DEV_HOST" ]]; then
         if [[ $IS_MAC ]]; then
-          sudo chmod g+w "$HOSTS_FILE"
+            sudo chmod g+w "$HOSTS_FILE"
         fi
 
         echo "Correcting host file entry..."
         sed -i 's/^[0-9.]\+\s\+'$DEV_HOST'\s*$//g' "$HOSTS_FILE"
         echo "$LOCALHOST_IP $DEV_HOST" >> "$HOSTS_FILE"
-
     fi
 fi
 

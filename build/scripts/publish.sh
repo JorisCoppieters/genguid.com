@@ -11,7 +11,7 @@ if [[ ! $ENV ]]; then
 fi
 
 if [[ $ENV == "test" ]]; then
-  HOST="test.$HOST"
+    HOST="test.$HOST"
 fi
 
 CURRENT_DATE_STAMP=`date +"%Y-%m-%d-%H%M%S"`
@@ -26,26 +26,19 @@ if [[ $ENV == "dev" ]]; then
 fi
 
 function replace_vars () {
-  if [[ $# -lt 1 ]]; then
-    echo "Usage $0: [FILE]";
-    return;
-  fi
-  FILE=$1
-  REPLACES='
-    s/<ENV>/'$ENV'/g;
-    s/<HOST>/'$HOST'/g;
-    s/<CURRENT_DATE_STAMP>/'$CURRENT_DATE_STAMP'/g;
-    s/<SERVER_ADMIN>/'$SERVER_ADMIN'/g;
-    s/<DIST_ZIP>/'$DIST_ZIP'/g;
-    s/<REMOTE_SCRIPT>/'$REMOTE_SCRIPT'/g;
-  '
-
-  if [[ $IS_MAC ]]; then
-    cat $FILE | sed "$REPLACES" > $FILE.tmp
-    mv $FILE.tmp $FILE
-  else
-    sed -i "$REPLACES" $FILE
-  fi
+    if [[ $# -lt 1 ]]; then
+        echo "Usage $0: [FILE]";
+        return;
+    fi
+    FILE=$1
+    sed -i '
+        s/<ENV>/'$ENV'/g;
+        s/<HOST>/'$HOST'/g;
+        s/<CURRENT_DATE_STAMP>/'$CURRENT_DATE_STAMP'/g;
+        s/<SERVER_ADMIN>/'$SERVER_ADMIN'/g;
+        s/<DIST_ZIP>/'$DIST_ZIP'/g;
+        s/<REMOTE_SCRIPT>/'$REMOTE_SCRIPT'/g;
+    ' $FILE
 }
 
 set +x
@@ -77,50 +70,49 @@ replace_vars ./dist/site/http.conf
 replace_vars ./dist/site/https.conf
 
 if [[ $ENV != "dev" ]]; then
+    set +x
+    echo ""
+    echo "#"
+    echo "# Zipping distribution & creating scripts"
+    echo "#"
+    echo ""
+    set -x
 
-  set +x
-  echo ""
-  echo "#"
-  echo "# Zipping distribution & creating scripts"
-  echo "#"
-  echo ""
-  set -x
+    cd ./dist/site
 
-  cd ./dist/site
+    zip -r $DIST_ZIP ./
 
-  zip -r $DIST_ZIP ./
+    mv $DIST_ZIP ../
+    cd ../
 
-  mv $DIST_ZIP ../
-  cd ../
+    cp -r ../build/scripts/publish-remote.sh $REMOTE_SCRIPT
+    replace_vars $REMOTE_SCRIPT
+    chmod +x $REMOTE_SCRIPT
 
-  cp -r ../build/scripts/publish-remote.sh $REMOTE_SCRIPT
-  replace_vars $REMOTE_SCRIPT
-  chmod +x $REMOTE_SCRIPT
+    set +x
+    echo ""
+    echo "#"
+    echo "# Executing remote script"
+    echo "#"
+    echo ""
+    set -x
 
-  set +x
-  echo ""
-  echo "#"
-  echo "# Executing remote script"
-  echo "#"
-  echo ""
-  set -x
+    scp $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
+    ssh jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
 
-  scp $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
-  ssh jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
+    cat $REMOTE_SCRIPT
+    set +e
+    ssh jorisweb.com downloads/$REMOTE_SCRIPT
+    set -e
 
-  cat $REMOTE_SCRIPT
-  set +e
-  ssh jorisweb.com downloads/$REMOTE_SCRIPT
-  set -e
+    set +x
+    echo ""
+    echo "#"
+    echo "# Cleaning up"
+    echo "#"
+    echo ""
+    set -x
 
-  set +x
-  echo ""
-  echo "#"
-  echo "# Cleaning up"
-  echo "#"
-  echo ""
-  set -x
-
-  cd ../
-  rm -r dist
+    cd ../
+    rm -r dist
 fi

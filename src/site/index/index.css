@@ -2,12 +2,12 @@ body {
     background: #3e3e3e;
     color: white;
     margin: 0;
-    font-family: monospace;
 }
 
 div.content {
     text-align: center;
     width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .noselect {

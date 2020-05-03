@@ -1,7 +1,6 @@
 const { optimize } = require('webpack');
 const common = require('./webpack.common.js');
 const merge = require('webpack-merge');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -13,7 +12,7 @@ module.exports = merge(common, {
     optimization: {
         minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
     },
-    plugins: [new optimize.AggressiveMergingPlugin(), new optimize.OccurrenceOrderPlugin(), new MiniCssExtractPlugin()],
+    plugins: [new optimize.AggressiveMergingPlugin(), new optimize.OccurrenceOrderPlugin()],
     module: {
         rules: [
             {
@@ -23,7 +22,7 @@ module.exports = merge(common, {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[name].[ext]',
+                            name: '[name][hash].[ext]',
                         },
                     },
                     {

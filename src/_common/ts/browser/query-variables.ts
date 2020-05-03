@@ -11,46 +11,68 @@ export enum QUERY_VARIABLE_KEY {
 // Declarations:
 // ******************************
 
-export function readQV(in_key: QUERY_VARIABLE_KEY): string | boolean | number | null {
-    const encodedKey = encodeURIComponent(in_key);
-    const regExp = new RegExp(`${encodedKey}=(.+)`);
+export function parseQueryString(in_queryString: string | null) {
+    if (!in_queryString) {
+        return {};
+    }
 
-    const keyValue = window.location.search
+    let queryString = in_queryString;
+    if (queryString.substr(0, 1) !== '?') {
+        queryString = `?${queryString}`;
+    }
+
+    return queryString
         .substring(1)
         .split('&')
-        .find((curValue) => curValue.match(regExp));
+        .reduce((dict: {[key: string]: string | undefined}, param) => {
+            const [key, value] = param.split('=');
+            const decKey = decodeURIComponent(key);
+            const decValue = decodeURIComponent(value);
+            dict[decKey] = decValue;
+            return dict;
+        }, {})
+}
 
-    if (!keyValue) {
+// ******************************
+
+export function toQueryString(in_keyValues: {[key: string]: string | undefined}) {
+    const queryString = Object.keys(in_keyValues)
+        .map((key: string) => {
+            const value = in_keyValues[key];
+            const encKey = encodeURIComponent(key);
+            return typeof(value) === 'undefined' ? `${encKey}` : `${encKey}=${encodeURIComponent(value)}`
+        })
+        .join('&');
+
+    return queryString.length ? `?${queryString}` : '';
+}
+
+// ******************************
+
+export function readQV(in_key: QUERY_VARIABLE_KEY): string | boolean | number | null {
+    const keyVals = parseQueryString(window.location.search);
+    const value = keyVals[in_key];
+    if (!value) {
         return null;
     }
-
-    const [key, value] = keyValue.split('=');
-    if (key !== encodedKey) {
-        return null;
-    }
-
-    const decodedValue = decodeURIComponent(value);
-    if (decodedValue === '') {
+    if (value === '') {
         return '';
     }
-    if (decodedValue === 'true') {
+    if (value === 'true') {
         return true;
     }
-    if (decodedValue === 'false') {
+    if (value === 'false') {
         return false;
     }
     if (!isNaN(+value)) {
         return +value;
     }
-    return decodedValue;
+    return value;
 }
 
 // ******************************
 
 export function writeQV(in_key: QUERY_VARIABLE_KEY, in_value: string | boolean | number | null): void {
-    const encodedKey = encodeURIComponent(in_key);
-    const regExp = new RegExp(`${encodedKey}=(.+)`);
-
     let value = in_value;
     if (value === null) {
         return clearQV(in_key);
@@ -59,22 +81,10 @@ export function writeQV(in_key: QUERY_VARIABLE_KEY, in_value: string | boolean |
         value = value ? 'true' : 'false';
     }
 
-    const encodedValue = encodeURIComponent(value);
+    const keyVals = parseQueryString(window.location.search);
+    keyVals[in_key] = `${value}`;
 
-    let newSearch =
-        '?' +
-        window.location.search
-            .substring(1)
-            .split('&')
-            .filter((curValue) => !curValue.match(regExp))
-            .concat([`${encodedKey}=${encodedValue}`])
-            .sort()
-            .join('&');
-
-    if (newSearch === '?') {
-        newSearch = '';
-    }
-
+    const newSearch = toQueryString(keyVals);
     if (window.location.search === newSearch) {
         return;
     }
@@ -85,20 +95,14 @@ export function writeQV(in_key: QUERY_VARIABLE_KEY, in_value: string | boolean |
 // ******************************
 
 export function clearQV(in_key: QUERY_VARIABLE_KEY): void {
-    const encodedKey = encodeURIComponent(in_key);
-    const regExp = new RegExp(`${encodedKey}=(.+)`);
+    const keyVals = parseQueryString(window.location.search);
+    if (typeof(keyVals[in_key]) !== 'undefined') {
+        delete keyVals[in_key];
+    }
 
-    let newSearch =
-        '?' +
-        window.location.search
-            .substring(1)
-            .split('&')
-            .filter((curValue) => !curValue.match(regExp))
-            .sort()
-            .join('&');
-
-    if (newSearch === '?') {
-        newSearch = '';
+    const newSearch = toQueryString(keyVals);
+    if (window.location.search === newSearch) {
+        return;
     }
 
     if (window.location.search === newSearch) {

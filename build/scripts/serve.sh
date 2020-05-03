@@ -8,9 +8,14 @@ DEV_HOST="dev.$HOST"
 DEV_PORT=$npm_package_config_dev_port
 if [[ ! $DEV_PORT ]]; then echo "npm_package_config_dev_port isn't set!"; exit -1; fi
 
-HOSTS_FILE="C:/Windows/System32/drivers/etc/hosts"
 CERTS_DIR="./src/_cert"
 LOCALHOST_IP="127.0.0.1"
+
+if [[ $IS_MAC ]]; then
+    INSTALLED_CERT=$(security find-certificate -a -p -c "$DEV_HOST")
+else
+    INSTALLED_CERT="TODO"
+fi
 
 if [[ ! -f "src/_cert/$DEV_HOST.crt" ]]; then
     echo "Creating certificate..."
@@ -53,22 +58,44 @@ EOF
 
     rm -f "$CERTS_DIR/$DEV_HOST.conf"
 
-    echo "Installing certificate..."
-    powershell ./build/scripts/install-cert.ps1 -certName:"$DEV_HOST certificate" -certPath:"$CERTS_DIR/$DEV_HOST.crt"
+    INSTALLED_CERT=""
 fi
 
-set +e
-CUR_IP=$(cat "$HOSTS_FILE" 2>/dev/null | grep " $DEV_HOST")
-set -e
-if [[ $CUR_IP != "$LOCALHOST_IP $DEV_HOST" ]]; then
-    echo "Correcting host file entry..."
-    sed -i 's/^[0-9.]\+\s\+'$DEV_HOST'\s*$//g' "$HOSTS_FILE"
-    echo "$LOCALHOST_IP $DEV_HOST" >> "$HOSTS_FILE"
+if [[ ! $INSTALLED_CERT ]]; then
+    echo "Installing certificate..."
+    if [[ $IS_MAC ]]; then
+        FOUND_CERT=$(security find-certificate -a -p -c "$DEV_HOST")
+        if [[ $FOUND_CERT ]]; then
+            sudo security delete-certificate -c "$DEV_HOST"
+        fi
+        sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$CERTS_DIR/$DEV_HOST.crt"
+    else
+        powershell ./build/scripts/install-cert.ps1 -certName:"$DEV_HOST certificate" -certPath:"$CERTS_DIR/$DEV_HOST.crt"
+    fi
+fi
 
-elif [[ ! $CUR_IP ]]; then
-    echo "Adding host file entry..."
-    echo "$LOCALHOST_IP $DEV_HOST" >> "$HOSTS_FILE"
+if [[ -f $HOSTS_FILE ]]; then
+    set +e
+    CUR_IP=$(cat "$HOSTS_FILE" 2>/dev/null | grep " $DEV_HOST")
+    set -e
+    if [[ ! $CUR_IP ]]; then
+        if [[ $IS_MAC ]]; then
+          sudo chmod g+w "$HOSTS_FILE"
+        fi
 
+        echo "Adding host file entry..."
+        echo "$LOCALHOST_IP $DEV_HOST" >> "$HOSTS_FILE"
+
+    elif [[ $CUR_IP != "$LOCALHOST_IP $DEV_HOST" ]]; then
+        if [[ $IS_MAC ]]; then
+          sudo chmod g+w "$HOSTS_FILE"
+        fi
+
+        echo "Correcting host file entry..."
+        sed -i 's/^[0-9.]\+\s\+'$DEV_HOST'\s*$//g' "$HOSTS_FILE"
+        echo "$LOCALHOST_IP $DEV_HOST" >> "$HOSTS_FILE"
+
+    fi
 fi
 
 echo "Clearing dist folder..."
@@ -77,19 +104,24 @@ rm -rf dist
 echo "Formatting code..."
 node build/format/format.js
 
-(
-    sleep 15;
-    chrome https://$DEV_HOST:$DEV_PORT
-) &
+if [[ $CHROME ]]; then
+    (
+        sleep 15;
+        if [[ $IS_MAC ]]; then
+            open -a "$CHROME" https://$DEV_HOST:$DEV_PORT
+        else
+            "$CHROME" https://$DEV_HOST:$DEV_PORT
+        fi
+    ) &
+fi
 
 echo "Building code..."
 if [[ -f ./src/server/server.ts ]]; then
     APP_ENV_TYPE=Development ts-node-dev --respawn --no-notify ./src/server/server.ts &
-    sleep 2
-    webpack --config ./build/webpack/site/webpack.dev.js -w &
+    WEBPACK_ENV="dev" webpack --config ./build/webpack/site/webpack.dev.js -w
 
 else
-    webpack-dev-server \
+    WEBPACK_ENV="dev" webpack-dev-server \
         --config build/webpack/site/webpack.dev.js \
         --https \
         --key ./src/_cert/$DEV_HOST.key \

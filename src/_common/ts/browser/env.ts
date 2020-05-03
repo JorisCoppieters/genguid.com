@@ -49,13 +49,13 @@ export function getEnvType(in_propertiesEnv: string) {
 // ******************************
 
 export function getIsDevUrl(): boolean {
-    return readQV(QUERY_VARIABLE_KEY.Env) === 'dev' || !!location.href.match(`dev\.${HOST.replace(/[.]/g, '\\.')}`);
+    return readQV(QUERY_VARIABLE_KEY.Env) === 'dev' || !!location.host.match(`^(?:www\.)?dev\.${HOST.replace(/[.]/g, '\\.')}`);
 }
 
 // ******************************
 
 export function getIsTestUrl(): boolean {
-    return readQV(QUERY_VARIABLE_KEY.Env) === 'test' || !!location.href.match(`test\.${HOST.replace(/[.]/g, '\\.')}`);
+    return readQV(QUERY_VARIABLE_KEY.Env) === 'test' || !!location.host.match(`^(?:www\.)?test\.${HOST.replace(/[.]/g, '\\.')}`);
 }
 
 // ******************************

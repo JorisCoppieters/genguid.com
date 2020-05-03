@@ -31,9 +31,11 @@ export function getFirstByTag(in_tagName: string, in_parent?: HTMLElement): HTML
 
 // ******************************
 
-export function createElement(in_parent: HTMLElement, in_tag: string): HTMLElement {
+export function createElement(in_parent: HTMLElement, in_tag: string, in_cssClasses?: string[] | string): HTMLElement {
     const element = document.createElement(in_tag);
+    const cssClasses = in_cssClasses ? (Array.isArray(in_cssClasses) ? in_cssClasses : [in_cssClasses]) : [];
     in_parent.appendChild(element);
+    element.className = cssClasses.join(' ');
     return element;
 }
 

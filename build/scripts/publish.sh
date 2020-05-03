@@ -60,7 +60,7 @@ echo "#"
 echo ""
 set -x
 
-webpack --config build/webpack/site/webpack.$WEBPACK_CONFIG.js
+WEBPACK_ENV=$ENV webpack --config build/webpack/site/webpack.$WEBPACK_CONFIG.js
 cp -r \
     ./build/scripts/apache2/http.conf \
     ./build/scripts/apache2/https.conf \

@@ -1,5 +1,14 @@
 const { CheckerPlugin } = require('awesome-typescript-loader');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const RobotstxtPlugin = require('robotstxt-webpack-plugin');
+const SitemapPlugin = require('sitemap-webpack-plugin').default;
+
+const env = process.env['WEBPACK_ENV'];
+const envPrefix = env !== 'prod' ? `${env}.` : '';
+
+let host = process.env['NPM_PACKAGE_CONFIG_HOST'];
+host = `${envPrefix}${host}`;
 
 const rootFolder = path.join(__dirname, '../../../');
 
@@ -9,18 +18,6 @@ module.exports = {
     },
     module: {
         rules: [
-            {
-                test: [/robots.txt/, /sitemap.xml/],
-                include: path.join(rootFolder, 'src/site'),
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                        },
-                    },
-                ],
-            },
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 include: path.join(rootFolder, 'src/_assets/images'),
@@ -62,15 +59,6 @@ module.exports = {
                 include: path.join(rootFolder, 'src/site'),
                 use: [
                     {
-                        loader: 'file-loader',
-                        options: {
-                            name: '[name].[ext]',
-                        },
-                    },
-                    {
-                        loader: 'extract-loader',
-                    },
-                    {
                         loader: 'html-loader',
                     },
                 ],
@@ -92,11 +80,46 @@ module.exports = {
     },
     output: {
         path: path.join(rootFolder, 'dist/site'),
-        filename: '[name].js',
-        publicPath: '/',
+        filename: '[name][hash].js',
     },
     resolve: {
         extensions: ['.ts', '.js'],
     },
-    plugins: [new CheckerPlugin()],
+    plugins: [
+        new SitemapPlugin(
+            `https://${host}`,
+            [
+                {
+                    path: '/',
+                    lastmod: '2020-01-01',
+                    priority: '1',
+                    changefreq: 'yearly',
+                },
+            ],
+            {
+                skipgzip: true,
+            }
+        ),
+        new RobotstxtPlugin({
+            policy: [
+                {
+                    userAgent: '*',
+                    allow: '/',
+                    crawlDelay: 2,
+                },
+            ],
+            sitemap: `https://${host}/sitemap.xml`,
+            host: host,
+        }),
+        new CheckerPlugin(),
+        new HtmlWebPackPlugin({
+            template: path.join(rootFolder, 'src/site/index/index.html'),
+            filename: './index.html',
+            minify: false,
+            chunks: ['index'],
+            meta: {
+                'google-site-verification': 'google-site-verification=1VJ4fItCgcxK2vWvdBrX9nttQNP2e73j6Ot-1aAGtr4',
+            },
+        }),
+    ],
 };

@@ -3,9 +3,7 @@
 // ******************************
 
 import './index.html';
-import './robots.txt';
-import './sitemap.xml';
-import '../../_common/ts/browser/imports/fonts';
+import './index.css';
 import '../../_common/ts/browser/imports/favicons';
 
 // ******************************

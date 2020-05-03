@@ -33,9 +33,10 @@ p.help {
     border-radius: 6px;
     padding: 4px 14px 3px 14px;
     margin: 0;
+    position: relative;
 }
 p.help i {
-    top: 1px;
+    top: 0px;
     position: relative;
     margin-right: 6px;
 }
@@ -190,23 +191,36 @@ div#testimonials .testimonial p.author {
     color: #575757;
 }
 
-/* Use a media query to add a breakpoint at 800px: */
 @media screen and (max-width: 1000px) {
     input#guid {
         font-size: 30px;
+        height: 80px;
+    }
+    #copied .copied-message {
+        left: -300px;
+        top: -75px;
+        font-size: 15pt;
+    }    
+    p.help {
+        font-size: 10pt;
+        top: 2px;
     }
 }
 
-/* Use a media query to add a breakpoint at 800px: */
 @media screen and (max-width: 800px) {
     input#guid {
-        font-size: 14px;
-        height: 50px;
+        font-size: 20px;
+        height: 70px;
         width: 100%;
     }
-
+    #copied .copied-message {
+        left: -200px;
+        top: -55px;
+        font-size: 10pt;
+    }    
     p.help {
-        display: none;
+        font-size: 8pt;
+        top: 5px;
     }
 
     .btn {
@@ -239,5 +253,37 @@ div#testimonials .testimonial p.author {
     div#testimonials .testimonial:after {
         font-size: 50pt;
         bottom: 40px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    input#guid {
+        font-size: 15px;
+        height: 60px;
+    }
+    #copied .copied-message {
+        left: -150px;
+        top: -50px;
+        font-size: 9pt;
+    }    
+    p.help {
+        font-size: 7pt;
+        top: 7px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    input#guid {
+        font-size: 13px;
+        height: 55px;
+    }
+    #copied .copied-message {
+        left: -130px;
+        top: -45px;
+        font-size: 8pt;
+    }    
+    p.help {
+        font-size: 6pt;
+        top: 8px;
     }
 }

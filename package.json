@@ -8,7 +8,7 @@
     "dependencies": {
         "color-print": "^1.0.2",
         "md5": "^2.2.1",
-        "uuid": "^7.0.3"
+        "uuid": "^8.0.0"
     },
     "description": "Generate GUIDs",
     "devDependencies": {

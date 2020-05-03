@@ -4,10 +4,10 @@ const path = require('path');
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
 const SitemapPlugin = require('sitemap-webpack-plugin').default;
 
-const env = process.env['WEBPACK_ENV'];
+const env = process.env['webpack_env'];
 const envPrefix = env !== 'prod' ? `${env}.` : '';
 
-let host = process.env['NPM_PACKAGE_CONFIG_HOST'];
+let host = process.env['npm_package_config_host'];
 host = `${envPrefix}${host}`;
 
 const rootFolder = path.join(__dirname, '../../../');

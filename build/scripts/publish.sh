@@ -31,14 +31,21 @@ function replace_vars () {
     return;
   fi
   FILE=$1
-  sed -i '
+  REPLACES='
     s/<ENV>/'$ENV'/g;
     s/<HOST>/'$HOST'/g;
     s/<CURRENT_DATE_STAMP>/'$CURRENT_DATE_STAMP'/g;
     s/<SERVER_ADMIN>/'$SERVER_ADMIN'/g;
     s/<DIST_ZIP>/'$DIST_ZIP'/g;
     s/<REMOTE_SCRIPT>/'$REMOTE_SCRIPT'/g;
-  ' $FILE
+  '
+
+  if [[ $IS_MAC ]]; then
+    cat $FILE | sed "$REPLACES" > $FILE.tmp
+    mv $FILE.tmp $FILE
+  else
+    sed -i "$REPLACES" $FILE
+  fi
 }
 
 set +x
@@ -60,7 +67,7 @@ echo "#"
 echo ""
 set -x
 
-WEBPACK_ENV=$ENV webpack --config build/webpack/site/webpack.$WEBPACK_CONFIG.js
+webpack_env=$ENV webpack --config build/webpack/site/webpack.$WEBPACK_CONFIG.js
 cp -r \
     ./build/scripts/apache2/http.conf \
     ./build/scripts/apache2/https.conf \

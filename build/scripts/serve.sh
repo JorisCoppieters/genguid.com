@@ -118,10 +118,10 @@ fi
 echo "Building code..."
 if [[ -f ./src/server/server.ts ]]; then
     APP_ENV_TYPE=Development ts-node-dev --respawn --no-notify ./src/server/server.ts &
-    WEBPACK_ENV="dev" webpack --config ./build/webpack/site/webpack.dev.js -w
+    webpack_env="dev" webpack --config ./build/webpack/site/webpack.dev.js -w
 
 else
-    WEBPACK_ENV="dev" webpack-dev-server \
+    webpack_env="dev" webpack-dev-server \
         --config build/webpack/site/webpack.dev.js \
         --https \
         --key ./src/_cert/$DEV_HOST.key \

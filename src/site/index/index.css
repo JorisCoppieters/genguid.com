@@ -112,6 +112,7 @@ input#guid {
 }
 
 div#testimonials {
+    font-family: Georgia, 'Times New Roman', Times, serif;
     background: -moz-linear-gradient(
         left,
         #4c4b4b 0%,

@@ -2,11 +2,13 @@ Param(
     $certPath = $null,
     $certName = $null
 )
-write-host $certPath
-write-host $certName
 
 if (-not $certPath) {
     throw "`$certPath not set"
+}
+
+if (-not (test-path -path $certPath)) {
+    throw "($certPath) doesn't exist"
 }
 
 if (-not $certName) {

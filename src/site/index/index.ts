@@ -6,10 +6,12 @@ import './index.html';
 import './index.css';
 import '../../_common/ts/browser/imports/favicons';
 
-// ******************************
-
 import { v4 as uuidV4 } from 'uuid';
-import { dbErr } from '../../_common/ts/system/print';
+import { dbErr } from '../../_common/ts/env/client/print';
+
+// ******************************
+// Script:
+// ******************************
 
 class Index {
     public copiedTimeout: any = null;

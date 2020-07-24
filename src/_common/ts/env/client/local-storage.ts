@@ -2,7 +2,10 @@
 // Imports:
 // ******************************
 
-import { LOCAL_STORAGE_PREFIX, ENV_TYPE } from '../env/constants';
+import { LOCAL_STORAGE_PREFIX, IS_TEST } from './vars';
+import { readQV, QUERY_VARIABLE_KEY } from './query-variables';
+import { IS_DEV } from '../client/vars';
+import { generateGuid } from '../../system/guid';
 
 // ******************************
 // Enums:
@@ -20,8 +23,26 @@ const LOCAL_STORAGE_KEY_DEV_MAPPING: { [key: string]: string } = {
 // Declarations:
 // ******************************
 
-export function readLS(in_envType: ENV_TYPE, in_key: string | string[]): string | boolean | number | null {
-    const key = _getKey(in_envType, in_key);
+export function getClientId(): string {
+    if (IS_DEV || IS_TEST) {
+        const queryVariableClientId = readQV(QUERY_VARIABLE_KEY.ClientId);
+        if (queryVariableClientId) {
+            return queryVariableClientId as string;
+        }
+    }
+
+    let clientId = readLS(LOCAL_STORAGE_KEY.ClientId) as string;
+    if (!clientId) {
+        clientId = generateGuid();
+        writeLS(LOCAL_STORAGE_KEY.ClientId, clientId);
+    }
+    return clientId;
+}
+
+// ******************************
+
+export function readLS(in_key: string | string[]): string | boolean | number | null {
+    const key = _getKey(in_key);
     const value = localStorage.getItem(key);
     if (value === null) {
         return null;
@@ -40,16 +61,16 @@ export function readLS(in_envType: ENV_TYPE, in_key: string | string[]): string 
 
 // ******************************
 
-export function writeLS(in_envType: ENV_TYPE, in_key: string | string[], in_value: string | boolean | number | null): void {
+export function writeLS(in_key: string | string[], in_value: string | boolean | number | null): void {
     let value = in_value;
     if (value === null) {
-        return clearLS(in_envType, in_key);
+        return clearLS(in_key);
     }
     if (typeof value === 'boolean') {
         value = value ? 'true' : 'false';
     }
 
-    const key = _getKey(in_envType, in_key);
+    const key = _getKey(in_key);
     if (localStorage.getItem(key) === value) {
         return;
     }
@@ -59,17 +80,17 @@ export function writeLS(in_envType: ENV_TYPE, in_key: string | string[], in_valu
 
 // ******************************
 
-export function clearLS(in_envType: ENV_TYPE, in_key: string | string[]): void {
-    return localStorage.removeItem(_getKey(in_envType, in_key));
+export function clearLS(in_key: string | string[]): void {
+    return localStorage.removeItem(_getKey(in_key));
 }
 
 // ******************************
 // Helper Functions:
 // ******************************
 
-function _getKey(in_envType: ENV_TYPE, in_key: string | string[]): string {
+function _getKey(in_key: string | string[]): string {
     let keys = Array.isArray(in_key) ? in_key : [in_key];
-    if (in_envType === ENV_TYPE.Development) {
+    if (IS_DEV) {
         keys = keys.map((key: string) => LOCAL_STORAGE_KEY_DEV_MAPPING[key] || key);
     }
     return `${LOCAL_STORAGE_PREFIX}#${keys.join('#')}`;

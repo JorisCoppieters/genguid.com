@@ -2,14 +2,14 @@
 // Imports:
 // ******************************
 
-import { ENV_TYPE } from '../env/constants';
+import { IS_DEV, IS_TEST } from './vars';
 
 // ******************************
 // Declarations:
 // ******************************
 
-export function db(in_envType: ENV_TYPE, in_message: string): void {
-    if ([ENV_TYPE.Development, ENV_TYPE.Test].indexOf(in_envType) >= 0) {
+export function db(in_message: string): void {
+    if (IS_DEV || IS_TEST) {
         // tslint:disable-next-line:no-console
         console.log(in_message);
     }

@@ -1,20 +1,31 @@
 #!/bin/bash
 set -e # Bail on first error
+set -x
 
 HOST=$npm_package_config_host
 if [[ ! $HOST ]]; then echo "npm_package_config_host isn't set!"; exit -1; fi
+
+VERSION=$npm_package_version
+if [[ ! $VERSION ]]; then echo "npm_package_version isn't set!"; exit -1; fi
+
+NAME=$npm_package_name
+if [[ ! $NAME ]]; then echo "npm_package_name isn't set!"; exit -1; fi
+
+PORT_IDX=$npm_package_config_port_idx
+if [[ ! $PORT_IDX ]]; then echo "npm_package_config_port_idx isn't set!"; exit -1; fi
+
+ENV_TYPE_FULL="Development"
 DEV_HOST="dev.$HOST"
+DEV_HTTPS_PORT=$(( 9000 + $PORT_IDX * 10 + 1 ))
 
-DEV_PORT=$npm_package_config_dev_port
-if [[ ! $DEV_PORT ]]; then echo "npm_package_config_dev_port isn't set!"; exit -1; fi
-
-CERTS_DIR="./src/_cert"
+ROOT_DIR=$(pwd | sed 's/^\/cygdrive\/c/C:/; s/^\/c/C:/')
+CERTS_DIR="$ROOT_DIR/src/_cert"
 LOCALHOST_IP="127.0.0.1"
 
 if [[ $IS_MAC ]]; then
     INSTALLED_CERT=$(security find-certificate -a -p -c "$DEV_HOST")
 else
-    INSTALLED_CERT="TODO"
+    INSTALLED_CERT=$(powershell -f $ROOT_DIR/build/scripts/find-cert.ps1 -certName:"$DEV_HOST certificate" -certPath:"$CERTS_DIR/$DEV_HOST.crt")
 fi
 
 if [[ ! -f "src/_cert/$DEV_HOST.crt" ]]; then
@@ -70,7 +81,7 @@ if [[ ! $INSTALLED_CERT ]]; then
         fi
         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "$CERTS_DIR/$DEV_HOST.crt"
     else
-        powershell ./build/scripts/install-cert.ps1 -certName:"$DEV_HOST certificate" -certPath:"$CERTS_DIR/$DEV_HOST.crt"
+        powershell -f $ROOT_DIR/build/scripts/install-cert.ps1 -certName:"$DEV_HOST certificate" -certPath:"$CERTS_DIR/$DEV_HOST.crt"
     fi
 fi
 
@@ -104,31 +115,43 @@ rm -rf dist
 echo "Formatting code..."
 node build/format/format.js
 
+echo "Launching site..."
+webpack_env="dev" webpack-dev-server \
+    --config build/webpack/site/webpack.dev.js \
+    --https \
+    --key ./src/_cert/$DEV_HOST.key \
+    --cert ./src/_cert/$DEV_HOST.crt \
+    --inline \
+    --hot \
+    --progress \
+    --host $DEV_HOST \
+    --port $DEV_HTTPS_PORT &
+sleep 20
+
 if [[ $CHROME ]]; then
-    (
-        sleep 15;
-        if [[ $IS_MAC ]]; then
-            open -a "$CHROME" https://$DEV_HOST:$DEV_PORT
-        else
-            "$CHROME" https://$DEV_HOST:$DEV_PORT
-        fi
-    ) &
+    if [[ $IS_MAC ]]; then
+        open -a "$CHROME" https://$DEV_HOST:$DEV_HTTPS_PORT
+    else
+        "$CHROME" https://$DEV_HOST:$DEV_HTTPS_PORT
+    fi
 fi
 
-echo "Building code..."
-if [[ -f ./src/server/server.ts ]]; then
-    APP_ENV_TYPE=Development ts-node-dev --respawn --no-notify ./src/server/server.ts &
-    webpack_env="dev" webpack --config ./build/webpack/site/webpack.dev.js -w
-
-else
-    webpack_env="dev" webpack-dev-server \
-        --config build/webpack/site/webpack.dev.js \
-        --https \
-        --key ./src/_cert/$DEV_HOST.key \
-        --cert ./src/_cert/$DEV_HOST.crt \
-        --inline \
-        --hot \
-        --progress \
-        --host $DEV_HOST \
-        --port $DEV_PORT
+if [[ -d ./src/server ]]; then
+    echo "Launching server..."
+    APP_VERSION=$VERSION \
+    APP_NAME=$NAME \
+    APP_HOST=$HOST \
+    APP_PORT_IDX=$PORT_IDX \
+    APP_ENV_TYPE=$ENV_TYPE_FULL \
+    ts-node-dev --respawn --no-notify ./src/server/server.ts &
+    sleep 20
 fi
+
+if [[ -d ./src/extension ]]; then
+    echo "Launching extension..."
+    node build/manifest/build.js
+    webpack_env="dev" webpack --config ./build/webpack/extension/webpack.dev.js -w &
+    sleep 20
+fi
+
+echo "Done!"

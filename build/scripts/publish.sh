@@ -97,12 +97,12 @@ if [[ $ENV != "dev" ]]; then
     echo ""
     set -x
 
-    scp $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
-    ssh jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
+    scp -o ConnectTimeout=60 $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
+    ssh -o ConnectTimeout=60 jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
 
     cat $REMOTE_SCRIPT
     set +e
-    ssh jorisweb.com downloads/$REMOTE_SCRIPT
+    ssh -o ConnectTimeout=60 jorisweb.com downloads/$REMOTE_SCRIPT
     set -e
 
     set +x

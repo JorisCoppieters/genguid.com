@@ -7,7 +7,6 @@ import './index.css';
 import '../../_common/ts/client/imports/favicons';
 
 import { v4 as uuidV4 } from 'uuid';
-import { dbErr } from '../../_common/ts/client/env/print';
 
 // ******************************
 // Script:
@@ -30,9 +29,7 @@ class Index {
 
         element.focus();
         element.select();
-        if (!document.execCommand('copy')) {
-            dbErr('Failed to copy GUID!');
-        }
+        document.execCommand('copy');
         const selection = document.getSelection();
         if (selection) {
             selection.removeAllRanges();

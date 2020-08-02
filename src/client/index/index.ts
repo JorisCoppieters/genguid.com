@@ -7,7 +7,7 @@ import './index.css';
 import '../../_common/ts/client/imports/favicons';
 
 import { v4 as uuidV4 } from 'uuid';
-import { dbErr } from '../../_common/ts/env/client/print';
+import { dbErr } from '../../_common/ts/client/env/print';
 
 // ******************************
 // Script:

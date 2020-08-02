@@ -2,10 +2,9 @@
 // Imports:
 // ******************************
 
-import { LOCAL_STORAGE_PREFIX, IS_TEST } from './vars';
+import { generateGuid } from '../../shared/core/guid';
+import { IS_DEV, LOCAL_STORAGE_PREFIX, IS_TEST } from './vars';
 import { readQV, QUERY_VARIABLE_KEY } from './query-variables';
-import { IS_DEV } from '../client/vars';
-import { generateGuid } from '../../system/guid';
 
 // ******************************
 // Enums:

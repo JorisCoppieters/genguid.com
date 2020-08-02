@@ -29,3 +29,10 @@ export enum API_METHOD {
 }
 
 // ******************************
+
+export enum SOCKET_EVENT {
+    Status = 'status'
+}
+
+// ******************************
+

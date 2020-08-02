@@ -4,7 +4,7 @@
 
 import './index.html';
 import './index.css';
-import '../../_common/ts/browser/imports/favicons';
+import '../../_common/ts/client/imports/favicons';
 
 import { v4 as uuidV4 } from 'uuid';
 import { dbErr } from '../../_common/ts/env/client/print';

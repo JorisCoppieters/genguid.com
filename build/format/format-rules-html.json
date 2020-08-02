@@ -8,6 +8,8 @@
     "inline_elements": [],
     "line_ending": "\n",
     "convert_line_endings": true,
+    "allow_arbitrary_closing_html_tags": true,
+    "remove_css": false,
     "multi_classes_order": [
         "^o-.*$",
         "^h-.*$",
@@ -18,7 +20,6 @@
         "^mt-.*$",
         ".*"
     ],
-    "remove_css": true,
     "ng_version": 2,
     "ng_attributes_order": [
         "sm.*",

@@ -86,14 +86,32 @@ echo "#"
 echo ""
 set -x
 
-webpack_env=$ENV_TYPE webpack --config build/webpack/site/webpack.$WEBPACK_CONFIG.js
+if [[ -d ./src/client/app ]]; then
+    (
+        if [[ $ENV_TYPE == "prod" ]]; then
+            ng build --prod
+        elif [[ $ENV_TYPE == "test" ]]; then
+            mv ./src/client/environments/environment.prod.ts ./src/client/environments/environment.prod.ts.bak
+            mv ./src/client/environments/environment.test.ts ./src/client/environments/environment.prod.ts
+            ng build --prod
+            mv ./src/client/environments/environment.prod.ts ./src/client/environments/environment.test.ts
+            mv ./src/client/environments/environment.prod.ts.bak ./src/client/environments/environment.prod.ts
+        else
+            ng build
+        fi
+    )
+elif [[ -d ./src/client ]]; then
+    webpack_env=$ENV_TYPE webpack --config build/webpack/client/webpack.$WEBPACK_CONFIG.js
+    rm -f dist/client/*.js.LICENSE.txt
+fi
+
 cp -r \
     ./build/scripts/apache2/http.conf \
     ./build/scripts/apache2/https.conf \
-    ./dist/site
+    ./dist/client
 
-replace_vars ./dist/site/http.conf
-replace_vars ./dist/site/https.conf
+replace_vars ./dist/client/http.conf
+replace_vars ./dist/client/https.conf
 
 if [[ $ENV_TYPE != "dev" ]]; then
 
@@ -105,7 +123,7 @@ if [[ $ENV_TYPE != "dev" ]]; then
     echo ""
     set -x
 
-    cd ./dist/site
+    cd ./dist/client
 
     zip -r $DIST_ZIP ./
 

@@ -1,6 +1,6 @@
 const { optimize } = require('webpack');
 const common = require('./webpack.common.js');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 const TerserJSPlugin = require('terser-webpack-plugin');
@@ -17,7 +17,7 @@ module.exports = merge(common, {
         rules: [
             {
                 test: /\.css$/i,
-                include: [path.join(rootFolder, 'src/site'), path.join(rootFolder, 'src/_common/css')],
+                include: [path.join(rootFolder, 'src/client'), path.join(rootFolder, 'src/_common/css')],
                 use: [
                     {
                         loader: 'file-loader',

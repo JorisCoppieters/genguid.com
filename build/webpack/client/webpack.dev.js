@@ -1,5 +1,5 @@
 const common = require('./webpack.common.js');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const path = require('path');
 
 const rootFolder = path.join(__dirname, '../../../');
@@ -11,7 +11,7 @@ module.exports = merge(common, {
         rules: [
             {
                 test: /\.css$/,
-                include: [path.join(rootFolder, 'src/site'), path.join(rootFolder, 'src/_common/css')],
+                include: [path.join(rootFolder, 'src/client'), path.join(rootFolder, 'src/_common/css')],
                 use: [
                     {
                         loader: 'file-loader',

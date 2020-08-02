@@ -1,9 +1,9 @@
 module.exports = {
-    roots: ['<rootDir>/src'],
+    roots: ['<rootDir>'],
     transform: {
         '^.+\\.ts?$': 'ts-jest',
     },
     testRegex: '.test.ts$',
-    testPathIgnorePatterns: ['test/'],
+    testPathIgnorePatterns: ['test/', 'src/client/test.ts', 'src/client/app', 'src/client/environments', 'src/e2e'],
     moduleFileExtensions: ['ts', 'js'],
 };

@@ -2,7 +2,7 @@
 // Imports:
 // ******************************
 
-import { LOG_LEVEL, ENV_TYPE } from '../enums';
+import { LOG_LEVEL, ENV_TYPE } from '../../shared/env/enums';
 import { readQV, QUERY_VARIABLE_KEY } from './query-variables';
 
 // ******************************

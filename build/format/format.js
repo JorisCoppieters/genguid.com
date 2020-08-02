@@ -110,6 +110,8 @@ function _getFileExtension(file) {
 // ******************************
 
 function _filesFilter(file) {
+    if (file.match(/\/node_modules\//)) return false;
+
     var fileExtension = _getFileExtension(file);
     if ([c_FILE_EXTENSION_HTML, c_FILE_EXTENSION_CSS].indexOf(fileExtension) < 0) return false;
     return true;

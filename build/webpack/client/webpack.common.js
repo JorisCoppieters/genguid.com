@@ -14,7 +14,7 @@ const rootFolder = path.join(__dirname, '../../../');
 
 module.exports = {
     entry: {
-        index: path.join(rootFolder, 'src/site/index/index.ts'),
+        index: path.join(rootFolder, 'src/client/index/index.ts'),
     },
     module: {
         rules: [
@@ -56,7 +56,7 @@ module.exports = {
             },
             {
                 test: /\.(html)$/,
-                include: path.join(rootFolder, 'src/site'),
+                include: path.join(rootFolder, 'src/client'),
                 use: [
                     {
                         loader: 'html-loader',
@@ -65,7 +65,7 @@ module.exports = {
             },
             {
                 test: /\.ts?$/,
-                include: [path.join(rootFolder, 'src/_common/ts'), path.join(rootFolder, 'src/site')],
+                include: [path.join(rootFolder, 'src/_common/ts'), path.join(rootFolder, 'src/client')],
                 exclude: /node_modules/,
                 use: [
                     {
@@ -79,7 +79,7 @@ module.exports = {
         ],
     },
     output: {
-        path: path.join(rootFolder, 'dist/site'),
+        path: path.join(rootFolder, 'dist/client'),
         filename: '[name][hash].js',
     },
     resolve: {
@@ -113,7 +113,7 @@ module.exports = {
         }),
         new CheckerPlugin(),
         new HtmlWebPackPlugin({
-            template: path.join(rootFolder, 'src/site/index/index.html'),
+            template: path.join(rootFolder, 'src/client/index/index.html'),
             filename: './index.html',
             minify: false,
             chunks: ['index'],

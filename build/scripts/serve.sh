@@ -115,18 +115,24 @@ rm -rf dist
 echo "Formatting code..."
 node build/format/format.js
 
-echo "Launching site..."
-webpack_env="dev" webpack-dev-server \
-    --config build/webpack/site/webpack.dev.js \
-    --https \
-    --key ./src/_cert/$DEV_HOST.key \
-    --cert ./src/_cert/$DEV_HOST.crt \
-    --inline \
-    --hot \
-    --progress \
-    --host $DEV_HOST \
-    --port $DEV_HTTPS_PORT &
-sleep 20
+if [[ -d ./src/client/app ]]; then
+    echo "Launching angular client..."
+    ng serve &
+    sleep 20
+elif [[ -d ./src/client ]]; then
+    echo "Launching client..."
+    webpack_env="dev" webpack-dev-server \
+        --config build/webpack/client/webpack.dev.js \
+        --https \
+        --key ./src/_cert/$DEV_HOST.key \
+        --cert ./src/_cert/$DEV_HOST.crt \
+        --inline \
+        --hot \
+        --progress \
+        --host $DEV_HOST \
+        --port $DEV_HTTPS_PORT &
+    sleep 20
+fi
 
 if [[ $CHROME ]]; then
     if [[ $IS_MAC ]]; then

@@ -142,12 +142,12 @@ if [[ $ENV_TYPE != "dev" ]]; then
     echo ""
     set -x
 
-    scp -o ConnectTimeout=60 $DIST_ZIP $REMOTE_SCRIPT jorisweb.com:downloads/
-    ssh -o ConnectTimeout=60 jorisweb.com chmod +x downloads/$REMOTE_SCRIPT
+    scp -o ConnectTimeout=60 $DIST_ZIP $REMOTE_SCRIPT jobot-software.com:downloads/
+    ssh -o ConnectTimeout=60 jobot-software.com chmod +x downloads/$REMOTE_SCRIPT
 
     cat $REMOTE_SCRIPT
     set +e
-    ssh -o ConnectTimeout=60 jorisweb.com downloads/$REMOTE_SCRIPT
+    ssh -o ConnectTimeout=60 jobot-software.com downloads/$REMOTE_SCRIPT
     set -e
 
     set +x

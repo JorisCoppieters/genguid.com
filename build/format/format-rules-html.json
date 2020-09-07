@@ -1,15 +1,18 @@
 {
+    "allow_arbitrary_closing_html_tags": true,
     "allow_empty_files": true,
     "block_elements": [
         "tg-icon"
     ],
+    "convert_line_endings": true,
     "definition_type": "HTML",
     "format_multi_classes_with_at_least": 3,
+    "ignore_paths": [
+        "node_modules/",
+        "tools/"
+    ],
     "inline_elements": [],
     "line_ending": "\n",
-    "convert_line_endings": true,
-    "allow_arbitrary_closing_html_tags": true,
-    "remove_css": false,
     "multi_classes_order": [
         "^o-.*$",
         "^h-.*$",
@@ -20,7 +23,6 @@
         "^mt-.*$",
         ".*"
     ],
-    "ng_version": 2,
     "ng_attributes_order": [
         "sm.*",
         "sd.*",
@@ -43,5 +45,7 @@
         "\\[ll.*\\]",
         "\\[xl.*\\]",
         "\\[.*\\]"
-    ]
+    ],
+    "ng_version": 2,
+    "remove_css": false
 }

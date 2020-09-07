@@ -2,6 +2,10 @@
 set -e # Bail on first error
 set -x
 
+#
+# Required:
+#
+
 HOST=$npm_package_config_host
 if [[ ! $HOST ]]; then echo "npm_package_config_host isn't set!"; exit -1; fi
 
@@ -13,6 +17,20 @@ if [[ ! $NAME ]]; then echo "npm_package_name isn't set!"; exit -1; fi
 
 PORT_IDX=$npm_package_config_port_idx
 if [[ ! $PORT_IDX ]]; then echo "npm_package_config_port_idx isn't set!"; exit -1; fi
+
+#
+# Optionals:
+#
+
+APP_SERVER_MAIL_FROM=$npm_package_config_server_mail_from
+if [[ ! $APP_SERVER_MAIL_FROM ]]; then
+    APP_SERVER_MAIL_FROM="joris.bot@gmail.com"
+fi
+
+APP_GA_TRACKING_ID=$npm_package_config_ga_tracking_id
+if [[ ! $APP_GA_TRACKING_ID ]]; then
+    APP_GA_TRACKING_ID=""
+fi
 
 ENV_TYPE_FULL="Development"
 DEV_HOST="dev.$HOST"
@@ -118,7 +136,6 @@ node build/format/format.js
 if [[ -d ./src/client/app ]]; then
     echo "Launching angular client..."
     ng serve &
-    sleep 20
 elif [[ -d ./src/client ]]; then
     echo "Launching client..."
     webpack_env="dev" webpack-dev-server \
@@ -131,7 +148,6 @@ elif [[ -d ./src/client ]]; then
         --progress \
         --host $DEV_HOST \
         --port $DEV_HTTPS_PORT &
-    sleep 20
 fi
 
 if [[ $CHROME ]]; then
@@ -149,15 +165,15 @@ if [[ -d ./src/server ]]; then
     APP_HOST=$HOST \
     APP_PORT_IDX=$PORT_IDX \
     APP_ENV_TYPE=$ENV_TYPE_FULL \
+    APP_SERVER_MAIL_FROM=$APP_SERVER_MAIL_FROM \
+    APP_GA_TRACKING_ID=$APP_GA_TRACKING_ID \
     ts-node-dev --respawn --no-notify ./src/server/server.ts &
-    sleep 20
 fi
 
 if [[ -d ./src/extension ]]; then
     echo "Launching extension..."
     node build/manifest/build.js
     webpack_env="dev" webpack --config ./build/webpack/extension/webpack.dev.js -w &
-    sleep 20
 fi
 
 echo "Done!"

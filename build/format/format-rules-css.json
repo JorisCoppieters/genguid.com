@@ -1,11 +1,15 @@
 {
     "allow_empty": true,
+    "convert_line_endings": true,
     "definition_type": "SCSS",
     "format_property_values_on_newlines": [
         "linear-gradient",
         "-moz-linear-gradient",
         "-webkit-linear-gradient"
     ],
-    "convert_line_endings": true,
+    "ignore_paths": [
+        "node_modules/",
+        "tools/"
+    ],
     "line_ending": "\n"
 }

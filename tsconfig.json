@@ -6,6 +6,10 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -29,7 +33,7 @@
     "node_modules",
     "**/*.spec.ts",
     "src/client",
-    "src/e2e"
+    "src/client/e2e"
   ],
   "include": [
     "**/*.ts"

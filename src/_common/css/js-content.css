@@ -12,13 +12,16 @@ p {
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: normal;
-    text-align: center;
     margin: 0;
 }
 
 body input {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: normal;
+}
+
+body button:focus {
+    outline: none;
 }
 
 div.navigate {
@@ -36,6 +39,11 @@ div.navigate a:visited {
 
 div.content {
     margin-bottom: 100px;
+    text-align: center;
+}
+
+div.login-overlay {
+    text-align: left;
 }
 
 div.heading {

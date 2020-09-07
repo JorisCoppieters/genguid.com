@@ -31,7 +31,18 @@ export enum API_METHOD {
 // ******************************
 
 export enum SOCKET_EVENT {
-    Status = 'status'
+    Status = 'status',
+}
+
+// ******************************
+
+export enum USER_FACT {
+    FirstName = 'FirstName',
+    LastName = 'LastName',
+    Age = 'Age',
+    Country = 'Country',
+    Region = 'Region',
+    City = 'City',
 }
 
 // ******************************

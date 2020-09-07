@@ -1,12 +1,12 @@
+import { v4 as uuidV4 } from 'uuid';
+
+import '../../_common/ts/client/imports/favicons';
+import './index.css';
+import './index.html';
+
 // ******************************
 // Imports:
 // ******************************
-
-import './index.html';
-import './index.css';
-import '../../_common/ts/client/imports/favicons';
-
-import { v4 as uuidV4 } from 'uuid';
 
 // ******************************
 // Script:

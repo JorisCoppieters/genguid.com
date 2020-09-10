@@ -5,7 +5,7 @@
         "url": "http://joriscoppieters.com"
     },
     "config": {
-        "ga_tracking_id": "",
+        "ga_tracking_id": "UA-51523185-4",
         "host": "genguid.com",
         "port_idx": "4",
         "server_mail_from": "",

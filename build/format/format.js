@@ -8,6 +8,7 @@ let cprint = require('color-print');
 let fs = require('fs');
 let fsp = require('fs-process');
 let path = require('path');
+let glob = require('glob');
 let torisFormat = require('toris-format');
 
 // ******************************
@@ -295,9 +296,14 @@ function _formatTsFilesWithPrettier(in_config) {
     const tabWidth = Math.max(2, in_config.tab_width || 4);
     const singleQuote = in_config.quote_style || 'single' === 'single';
     const lineLength = Math.max(80, in_config.line_length || 80);
-    const glob = `"./src/**/*.ts"`;
+    const globPath = `"./src/**/*.ts"`;
 
-    let args = [`--tab-width ${tabWidth}`, `${singleQuote ? `--single-quote` : ''}`, `--print-width ${lineLength}`, `--write`, glob];
+    const files = glob.sync(globPath);
+    if (!files.length) {
+        return;
+    }
+
+    let args = [`--tab-width ${tabWidth}`, `${singleQuote ? `--single-quote` : ''}`, `--print-width ${lineLength}`, `--write`, globPath];
 
     let child_process = require('child_process');
     child_process.execSync(`prettier ${args.join(' ')}`, { stdio: 'inherit' });

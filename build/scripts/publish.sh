@@ -26,12 +26,14 @@ elif [[ $ENV_TYPE == "dev" ]]; then
     ENV_TYPE_FULL="Development"
 fi
 
-ENV_HOST=$HOST
+ENV_HOST_PREFIX=""
 if [[ $ENV_TYPE == "test" ]]; then
-    ENV_HOST="test.$ENV_HOST"
+    ENV_HOST_PREFIX="test."
 elif [[ $ENV_TYPE == "dev" ]]; then
-    ENV_HOST="dev.$ENV_HOST"
+    ENV_HOST_PREFIX="dev."
 fi
+
+ENV_HOST="${ENV_HOST_PREFIX}${HOST}"
 
 CURRENT_DATE_STAMP=`date +"%Y-%m-%d-%H%M%S"`
 
@@ -57,6 +59,7 @@ function replace_vars () {
         s/<APP_PORT_IDX>/'$PORT_IDX'/g;
         s/<APP_ENV_TYPE>/'$ENV_TYPE_FULL'/g;
         s/<ENV_HOST>/'$ENV_HOST'/g;
+        s/<ENV_HOST_PREFIX>/'$ENV_HOST_PREFIX'/g;
         s/<ENV_TYPE>/'$ENV_TYPE'/g;
         s/<ENV_TYPE_FULL>/'$ENV_TYPE_FULL'/g;
         s/<CURRENT_DATE_STAMP>/'$CURRENT_DATE_STAMP'/g;
@@ -103,6 +106,9 @@ if [[ -d ./src/client/app ]]; then
 elif [[ -d ./src/client ]]; then
     webpack_env=$ENV_TYPE webpack --config build/webpack/client/webpack.$WEBPACK_CONFIG.js
     rm -f dist/client/*.js.LICENSE.txt
+elif [[ -d ./src ]]; then
+    mkdir dist
+    cp -r src dist/client
 fi
 
 cp -r \
@@ -142,12 +148,12 @@ if [[ $ENV_TYPE != "dev" ]]; then
     echo ""
     set -x
 
-    scp -o ConnectTimeout=60 $DIST_ZIP $REMOTE_SCRIPT jobot-software.com:downloads/
-    ssh -o ConnectTimeout=60 jobot-software.com chmod +x downloads/$REMOTE_SCRIPT
+    scp -o ConnectTimeout=60 $DIST_ZIP $REMOTE_SCRIPT services:downloads/
+    ssh -o ConnectTimeout=60 services chmod +x downloads/$REMOTE_SCRIPT
 
     cat $REMOTE_SCRIPT
     set +e
-    ssh -o ConnectTimeout=60 jobot-software.com downloads/$REMOTE_SCRIPT
+    ssh -o ConnectTimeout=60 services downloads/$REMOTE_SCRIPT
     set -e
 
     set +x

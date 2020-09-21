@@ -51,7 +51,7 @@
     },
     "directories": {
         "build": "build",
-        "lib": "lib"
+        "src": "src"
     },
     "homepage": "https://genguid.com",
     "license": "LicenseRef-LICENSE",

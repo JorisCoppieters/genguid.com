@@ -138,7 +138,7 @@ if [[ -d ./src/client/app ]]; then
     ng serve &
 elif [[ -d ./src/client ]]; then
     echo "Launching client..."
-    webpack_env="dev" webpack-dev-server \
+    webpack_env="dev" yarn webpack-dev-server \
         --config build/webpack/client/webpack.dev.js \
         --https \
         --key ./src/_cert/$DEV_HOST.key \

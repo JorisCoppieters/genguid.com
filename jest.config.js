@@ -4,8 +4,9 @@ module.exports = {
         '^.+\\.ts?$': 'ts-jest',
     },
     testRegex: '.test.ts$',
-    testPathIgnorePatterns: ['test/', 'src/client/test.ts', 'src/client/app', 'src/client/environments', 'src/e2e'],
+    testPathIgnorePatterns: ['test/', 'src/client/test.ts', 'src/client/app', 'src/client/env/config.(base|dev|test|prod).ts', 'src/tests'],
     moduleFileExtensions: ['ts', 'js'],
     collectCoverage: true,
-    coverageReporters: ['json', 'html'],
+    coverageReporters: ['json'],
+    coverageDirectory: require('path').join(__dirname, './.coverage/core'),
 };

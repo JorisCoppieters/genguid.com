@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 
-import '../../_common/ts/client/imports/favicons';
-import './index.css';
+import '../imports/favicons';
+import '../imports/fonts';
 import './index.html';
 
 // ******************************

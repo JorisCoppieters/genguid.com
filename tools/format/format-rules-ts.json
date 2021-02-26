@@ -1,0 +1,15 @@
+{
+    "convert_line_endings": true,
+    "ignore_paths": [
+        "src/client/polyfills.ts",
+        "src/client/test.ts",
+        "node_modules/",
+        "tools/"
+    ],
+    "line_ending": "\n",
+    "line_length": 200,
+    "quote_style": "single",
+    "run_prettier": false,
+    "sort_imports": true,
+    "tab_width": 4
+}

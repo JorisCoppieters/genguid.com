@@ -118,7 +118,7 @@ launch_server \
 
 if [[ -d ./src/extension ]]; then
     echo "Launching extension..."
-    node build/manifest/build.js
+    node tools/manifest/build.js
     webpack_env="dev" webpack --config ./tools/webpack/extension/webpack.dev.js -w &
 fi
 

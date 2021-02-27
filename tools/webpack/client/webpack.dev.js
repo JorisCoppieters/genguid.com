@@ -11,8 +11,7 @@ module.exports = merge(common, {
         rules: [
             {
                 test: /\.css$/,
-                mimetype: 'text/css',
-                include: [path.join(rootFolder, 'src/client'), path.join(rootFolder, 'src/client/index')],
+                include: [path.join(rootFolder, 'src/client')],
                 use: [
                     {
                         loader: 'file-loader',
@@ -33,7 +32,7 @@ module.exports = merge(common, {
                         },
                     },
                 ],
-            }
+            },
         ],
     },
 });

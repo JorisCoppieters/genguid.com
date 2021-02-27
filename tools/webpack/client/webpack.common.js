@@ -79,7 +79,6 @@ module.exports = {
         ],
     },
     output: {
-        clean: true,
         path: path.join(rootFolder, 'dist/client'),
         filename: '[name][hash].js',
     },
@@ -87,20 +86,20 @@ module.exports = {
         extensions: ['.ts', '.js'],
     },
     plugins: [
-        new SitemapPlugin({
-            base: `https://${host}`,
-            paths: [
+        new SitemapPlugin(
+            `https://${host}`,
+            [
                 {
                     path: '/',
                     lastmod: '2020-01-01',
-                    priority: 1,
+                    priority: '1',
                     changefreq: 'yearly',
                 },
             ],
-            options: {
+            {
                 skipgzip: true,
-            },
-        }),
+            }
+        ),
         new RobotstxtPlugin({
             policy: [
                 {

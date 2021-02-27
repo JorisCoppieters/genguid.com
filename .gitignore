@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/dist-all
 /tmp
 /out-tsc
 
@@ -29,12 +30,14 @@ package-lock.json
 /.sass-cache
 /connect.lock
 /coverage
+/coverage.release
+/.coverage
 /libpeerconnection.log
 npm-debug.log
 testem.log
 /typings
 yarn-error.log
-yarn.lock
+debug.log
 
 # e2e
 /e2e/*.js
@@ -49,3 +52,6 @@ Thumbs.db
 
 # Other
 data
+data.bak
+src/cert/*.crt
+src/cert/*.key

@@ -58,7 +58,7 @@ ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
 OS_TYPE=$(get_os_type)
 
-install_certificates ${ENV_TYPE} ${APP_HOST}
+install_certificates ${ENV_TYPE} ${APP_HOST} "INSTALL"
 create_host_entries ${ENV_TYPE} ${APP_HOST}
 
 echo "Clearing dist folder..."
@@ -80,7 +80,7 @@ if [[ -d ./src/client/app ]]; then
     yarn ng serve &
 elif [[ -d ./src/client ]]; then
     echo "Launching client..."
-    webpack_env="dev" yarn webpack serve \
+    webpack_env="dev" yarn webpack-dev-server \
         --config tools/webpack/client/webpack.dev.js \
         --inline \
         --hot \

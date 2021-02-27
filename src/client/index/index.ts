@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 
 import '../imports/favicons';
-import '../imports/fonts';
+import './index.css';
 import './index.html';
 
 // ******************************

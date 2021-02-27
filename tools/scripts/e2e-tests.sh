@@ -55,6 +55,8 @@ ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
 PORT=$(get_web_test_port ${ENV_TYPE} ${APP_PORT_IDX})
 
+install_certificates ${ENV_TYPE} ${APP_HOST} ""
+
 set_config \
     "${ENV_TYPE}" \
     "${APP_HOST}" \

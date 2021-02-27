@@ -1,0 +1,5 @@
+codecov:
+  token: TODO
+coverage:
+  status:
+    patch: off

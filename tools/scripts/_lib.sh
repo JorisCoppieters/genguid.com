@@ -351,13 +351,19 @@ function restore_config () {
 ##################################################
 
 function install_certificates () {
-  if [[ $# -lt 2 ]]; then
-    echo "Usage: install_certificates [ENV_TYPE] [APP_HOST]";
+  if [[ $# -lt 3 ]]; then
+    echo "Usage: install_certificates [ENV_TYPE] [APP_HOST] [INSTALL_CERT]";
     exit 1;
   fi
 
   local ENV_TYPE="${1}"
   local APP_HOST="${2}"
+  local INSTALL_CERT="${3}"
+  if [[ ! ${INSTALL_CERT} ]]; then
+    if [[ ${LOCAL} ]]; then
+      INSTALL_CERT="INSTALL"
+    fi
+  fi
 
   local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
@@ -367,10 +373,12 @@ function install_certificates () {
 
   local OS_TYPE="$(get_os_type)"
 
-  if [[ ${OS_TYPE} == "mac" ]]; then
-    local INSTALLED_CERT="$(security find-certificate -a -p -c "${ENV_HOST}")"
-  else
-    local INSTALLED_CERT="$(powershell -f ${ROOT_DIR}/tools/scripts/find-cert.ps1 -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt")"
+  if [[ ${INSTALL_CERT} == "INSTALL" ]]; then
+    if [[ ${OS_TYPE} == "mac" ]]; then
+      local INSTALLED_CERT="$(security find-certificate -a -p -c "${ENV_HOST}")"
+    else
+      local INSTALLED_CERT="$(powershell -f ${ROOT_DIR}/tools/scripts/find-cert.ps1 -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt")"
+    fi
   fi
 
   if [[ ! -f "src/cert/${ENV_HOST}.crt" ]]; then
@@ -400,6 +408,7 @@ function install_certificates () {
     echo "DNS.4 = *.${ENV_HOST}"                        >> "${CERTS_DIR}/${ENV_HOST}.conf"
 
     openssl req \
+      -batch \
       -new \
       -x509 \
       -sha256 \
@@ -415,7 +424,7 @@ function install_certificates () {
     local INSTALLED_CERT=""
   fi
 
-  if [[ ! ${INSTALLED_CERT} ]]; then
+  if [[ ${INSTALL_CERT} == "INSTALL" ]] && [[ ! ${INSTALLED_CERT} ]]; then
     echo "Installing certificate..."
     if [[ ${OS_TYPE} == "mac" ]]; then
       local FOUND_CERT="$(security find-certificate -a -p -c "${ENV_HOST}")"

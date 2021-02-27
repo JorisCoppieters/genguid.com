@@ -14,12 +14,12 @@
     },
     "dependencies": {
         "color-print": "^1.0.2",
-        "uuid": "^8.3.0"
+        "uuid": "^8.3.2"
     },
     "description": "Generate GUIDs",
     "devDependencies": {
         "@types/bluebird": "^3.5.33",
-        "@types/jest": "^26.0.13",
+        "@types/jest": "^26.0.20",
         "@types/protractor": "^4.0.0",
         "@types/uuid": "^8.3.0",
         "@types/webpack": "^4.41.22",

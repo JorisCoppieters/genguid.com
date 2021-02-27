@@ -2,7 +2,7 @@ import { browser, logging } from 'protractor';
 
 import { AppPage } from '../../../shared/app-page';
 
-describe('PROD_URL', function () {
+describe('https://genguid.com', function () {
     let page: AppPage;
 
     beforeEach(() => {
@@ -10,16 +10,14 @@ describe('PROD_URL', function () {
         const width = 1024;
         const height = 600;
         browser.driver.manage().window().setSize(width, height);
+        browser.waitForAngularEnabled(false);
     });
 
-    it('should show sidebar header', () => {
+    it('should show content', async () => {
         page.navigateTo();
-        expect(page.getSidebarHeading()).toEqual('APP_NAME');
-    });
 
-    it('should show center header', () => {
-        page.navigateTo();
-        expect(page.getWelcomeHeading()).toEqual('Welcome!');
+        const content = await page.getContent();
+        expect(content).toBeDefined();
     });
 
     afterEach(async () => {

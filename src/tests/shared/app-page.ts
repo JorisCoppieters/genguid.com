@@ -11,11 +11,7 @@ export class AppPage {
         return browser.get(this._url) as Promise<unknown>;
     }
 
-    getSidebarHeading(): Promise<string> {
-        return element(by.css('app-root .sidebar .heading .icon-text')).getText() as Promise<string>;
-    }
-
-    getWelcomeHeading(): Promise<string> {
-        return element(by.css('app-root .center .heading h1')).getText() as Promise<string>;
+    getContent(): Promise<string> {
+        return element(by.css('body .content')).getText() as Promise<string>;
     }
 }

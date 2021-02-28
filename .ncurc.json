@@ -1,4 +1,4 @@
 {
     "upgrade": true,
-    "reject": ["socket.io", "typescript", "zone.js", "karma"]
+    "reject": ["typescript"]
 }

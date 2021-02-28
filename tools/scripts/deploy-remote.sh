@@ -12,24 +12,24 @@ SERVICE_NAME="<SERVICE_NAME>"
 ENV_TYPE="<ENV_TYPE>"
 
 ROOT_DIR="/home/ubuntu"
-DOWNLOADS_DIR="${ROOT_DIR}/downloads"; mkdir -p ${DOWNLOADS_DIR}
-SITES_DIR="${ROOT_DIR}/sites"; mkdir -p ${SITES_DIR}
-SITES_BACKUP_DIR="${ROOT_DIR}/sites_backup"; mkdir -p ${SITES_BACKUP_DIR}
-SERVICES_DIR="${ROOT_DIR}/services"; mkdir -p ${SERVICES_DIR}
-SERVICES_BACKUP_DIR="${ROOT_DIR}/services_backup"; mkdir -p ${SERVICES_BACKUP_DIR}
-DATA_DIR="${ROOT_DIR}/data"; mkdir -p ${DATA_DIR}
-DATA_BACKUP_DIR="${ROOT_DIR}/data_backup"; mkdir -p ${DATA_BACKUP_DIR}
-CONF_DIR="${ROOT_DIR}/conf"; mkdir -p ${CONF_DIR}
+DOWNLOADS_DIR="${ROOT_DIR}/downloads"; mkdir -p "${DOWNLOADS_DIR}"
+SITES_DIR="${ROOT_DIR}/sites"; mkdir -p "${SITES_DIR}"
+SITES_BACKUP_DIR="${ROOT_DIR}/sites_backup"; mkdir -p "${SITES_BACKUP_DIR}"
+SERVICES_DIR="${ROOT_DIR}/services"; mkdir -p "${SERVICES_DIR}"
+SERVICES_BACKUP_DIR="${ROOT_DIR}/services_backup"; mkdir -p "${SERVICES_BACKUP_DIR}"
+DATA_DIR="${ROOT_DIR}/data"; mkdir -p "${DATA_DIR}"
+DATA_BACKUP_DIR="${ROOT_DIR}/data_backup"; mkdir -p "${DATA_BACKUP_DIR}"
+CONF_DIR="${ROOT_DIR}/conf"; mkdir -p "${CONF_DIR}"
 UNZIP_DIR="${DOWNLOADS_DIR}/${APP_NAME}-${ENV_TYPE}-tmp"
 
-if [[ -d ${UNZIP_DIR} ]]; then
-  rm -rf ${UNZIP_DIR}
+if [[ -d "${UNZIP_DIR}" ]]; then
+  rm -rf "${UNZIP_DIR}"
 fi
-mkdir ${UNZIP_DIR}
-cd ${UNZIP_DIR}
+mkdir "${UNZIP_DIR}"
+cd "${UNZIP_DIR}"
 unzip "${DOWNLOADS_DIR}/${DIST_ZIP}"
 
-if [[ -d server ]]; then
+if [[ -d "server" ]]; then
   chmod +x *.sh
   ./install.sh
 
@@ -42,7 +42,7 @@ if [[ -d server ]]; then
   fi
 
   cd ../
-  mv ${UNZIP_DIR} "${SERVICES_DIR}/${SERVICE_NAME}"
+  mv "${UNZIP_DIR}" "${SERVICES_DIR}/${SERVICE_NAME}"
   cd "${SERVICES_DIR}/${SERVICE_NAME}"
   ./start.sh
 
@@ -53,8 +53,8 @@ if [[ -d server ]]; then
   rm -f "${ENV_HOST}-le-ssl.conf"
   mv "${SERVICES_DIR}/${SERVICE_NAME}/client/https.conf" "${ENV_HOST}-le-ssl.conf"
 
-elif [[ -d client ]]; then
-  cd client
+elif [[ -d "client" ]]; then
+  cd "client"
   sudo chown -R www-data:ubuntu .
   cd ../
 
@@ -62,7 +62,7 @@ elif [[ -d client ]]; then
     mv "${SITES_DIR}/${ENV_HOST}/" "${SITES_BACKUP_DIR}/${CURRENT_DATE_STAMP}_${ENV_HOST}"
   fi
 
-  mv client "${SITES_DIR}/${ENV_HOST}"
+  mv "client" "${SITES_DIR}/${ENV_HOST}"
 
   cd "${CONF_DIR}"
   rm -f "${ENV_HOST}.conf"

@@ -9,9 +9,9 @@ function get_webpack_config () {
   local ENV_TYPE="${1}"
 
   local WEBPACK_CONFIG="dev"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local WEBPACK_CONFIG="prod"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local WEBPACK_CONFIG="prod"
   fi
 
@@ -29,9 +29,9 @@ function get_env_type_full () {
   local ENV_TYPE="${1}"
 
   local ENV_TYPE_FULL="Development"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local ENV_TYPE_FULL="Test"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local ENV_TYPE_FULL="Production"
   fi
 
@@ -49,9 +49,9 @@ function get_env_host_prefix () {
   local ENV_TYPE="${1}"
 
   local ENV_HOST_PREFIX="dev."
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local ENV_HOST_PREFIX="test."
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local ENV_HOST_PREFIX=""
   fi
 
@@ -70,10 +70,10 @@ function get_env_service_name () {
   local SERVICE_NAME="${2}"
 
   local ENV_SERVICE_NAME="dev.${SERVICE_NAME}"
-  if [[ ${SERVICE_NAME} ]]; then
-    if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${SERVICE_NAME}" ]]; then
+    if [[ "${ENV_TYPE}" == "test" ]]; then
       local ENV_SERVICE_NAME="test.${SERVICE_NAME}"
-    elif [[ ${ENV_TYPE} == "prod" ]]; then
+    elif [[ "${ENV_TYPE}" == "prod" ]]; then
       local ENV_SERVICE_NAME="${SERVICE_NAME}"
     fi
   fi
@@ -93,9 +93,9 @@ function get_socket_http_port () {
   local APP_PORT_IDX="${2}"
 
   local SOCKET_HTTP_PORT="$(( 8000 + $APP_PORT_IDX * 10 ))"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local SOCKET_HTTP_PORT="$(( 6000 + $APP_PORT_IDX * 10 ))"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local SOCKET_HTTP_PORT="$(( 4000 + $APP_PORT_IDX * 10 ))"
   fi
 
@@ -114,9 +114,9 @@ function get_socket_https_port () {
   local APP_PORT_IDX="${2}"
 
   local SOCKET_HTTPS_PORT="$(( 8000 + $APP_PORT_IDX * 10 + 1 ))"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local SOCKET_HTTPS_PORT="$(( 6000 + $APP_PORT_IDX * 10 + 1 ))"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local SOCKET_HTTPS_PORT="$(( 4000 + $APP_PORT_IDX * 10 + 1 ))"
   fi
 
@@ -135,9 +135,9 @@ function get_web_http_port () {
   local APP_PORT_IDX="${2}"
 
   local WEB_HTTP_PORT="$(( 9000 + $APP_PORT_IDX * 10 ))"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local WEB_HTTP_PORT="$(( 7000 + $APP_PORT_IDX * 10 ))"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local WEB_HTTP_PORT="$(( 5000 + $APP_PORT_IDX * 10 ))"
   fi
 
@@ -156,9 +156,9 @@ function get_web_https_port () {
   local APP_PORT_IDX="${2}"
 
   local WEB_HTTPS_PORT="$(( 9000 + $APP_PORT_IDX * 10 + 1 ))"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local WEB_HTTPS_PORT="$(( 7000 + $APP_PORT_IDX * 10 + 1 ))"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local WEB_HTTPS_PORT="$(( 5000 + $APP_PORT_IDX * 10 + 1 ))"
   fi
 
@@ -177,9 +177,9 @@ function get_web_test_port () {
   local APP_PORT_IDX="${2}"
 
   local WEB_HTTPS_PORT="$(( 9000 + $APP_PORT_IDX * 10 + 2 ))"
-  if [[ ${ENV_TYPE} == "test" ]]; then
+  if [[ "${ENV_TYPE}" == "test" ]]; then
     local WEB_HTTPS_PORT="$(( 7000 + $APP_PORT_IDX * 10 + 2 ))"
-  elif [[ ${ENV_TYPE} == "prod" ]]; then
+  elif [[ "${ENV_TYPE}" == "prod" ]]; then
     local WEB_HTTPS_PORT="$(( 5000 + $APP_PORT_IDX * 10 + 2 ))"
   fi
 
@@ -254,19 +254,19 @@ function replace_vars () {
   local APP_GA_TRACKING_ID="${9}"
   local CURRENT_DATE_STAMP="${10}"
 
-  local ENV_TYPE_FULL="$(get_env_type_full ${ENV_TYPE})"
+  local ENV_TYPE_FULL="$(get_env_type_full "${ENV_TYPE}")"
 
-  local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
+  local ENV_HOST_PREFIX="$(get_env_host_prefix "${ENV_TYPE}")"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
-  local ENV_SERVICE_NAME="$(get_env_service_name ${ENV_TYPE} ${SERVICE_NAME})"
+  local ENV_SERVICE_NAME="$(get_env_service_name "${ENV_TYPE}" "${SERVICE_NAME}")"
 
   local SERVER_ADMIN="jobot.software@gmail.com"
 
-  local DIST_ZIP="$(get_dist_zip_name ${ENV_TYPE} ${APP_NAME} ${CURRENT_DATE_STAMP})"
-  local REMOTE_SCRIPT="$(get_remote_script_name ${ENV_TYPE} ${APP_NAME} ${CURRENT_DATE_STAMP})"
+  local DIST_ZIP="$(get_dist_zip_name "${ENV_TYPE}" "${APP_NAME}" "${CURRENT_DATE_STAMP}")"
+  local REMOTE_SCRIPT="$(get_remote_script_name "${ENV_TYPE}" "${APP_NAME}" "${CURRENT_DATE_STAMP}")"
 
-  local SOCKET_HTTP_PORT=$(get_socket_http_port ${ENV_TYPE} ${APP_PORT_IDX})
+  local SOCKET_HTTP_PORT=$(get_socket_http_port "${ENV_TYPE}" "${APP_PORT_IDX}")
 
   sed -i '
       s/<APP_VERSION>/'${APP_VERSION}'/g;
@@ -285,7 +285,7 @@ function replace_vars () {
       s/<DIST_ZIP>/'${DIST_ZIP}'/g;
       s/<REMOTE_SCRIPT>/'${REMOTE_SCRIPT}'/g;
       s/<SOCKET_HTTP_PORT>/'${SOCKET_HTTP_PORT}'/g;
-  ' ${FILE}
+  ' "${FILE}"
 }
 
 ##################################################
@@ -326,9 +326,9 @@ function set_config () {
     echo "  gaTrackingId: '${APP_GA_TRACKING_ID}',"       >> "${BASE_CONFIG_FILE}"
     echo "};"                                             >> "${BASE_CONFIG_FILE}"
 
-    if [[ ${ENV_TYPE} == "prod" ]]; then
+    if [[ "${ENV_TYPE}" == "prod" ]]; then
       cp "${PROD_CONFIG_FILE}" "${CONFIG_FILE}"
-    elif [[ ${ENV_TYPE} == "test" ]]; then
+    elif [[ "${ENV_TYPE}" == "test" ]]; then
       cp "${TEST_CONFIG_FILE}" "${CONFIG_FILE}"
     else
       cp "${DEV_CONFIG_FILE}" "${CONFIG_FILE}"
@@ -359,13 +359,13 @@ function install_certificates () {
   local ENV_TYPE="${1}"
   local APP_HOST="${2}"
   local INSTALL_CERT="${3}"
-  if [[ ! ${INSTALL_CERT} ]]; then
-    if [[ ${LOCAL} ]]; then
+  if [[ ! "${INSTALL_CERT}" ]]; then
+    if [[ "${LOCAL}" ]]; then
       INSTALL_CERT="INSTALL"
     fi
   fi
 
-  local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
+  local ENV_HOST_PREFIX="$(get_env_host_prefix "${ENV_TYPE}")"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
   local ROOT_DIR="$(pwd | sed 's/^\/cygdrive\/c/C:/; s/^\/c/C:/')"
@@ -373,17 +373,17 @@ function install_certificates () {
 
   local OS_TYPE="$(get_os_type)"
 
-  if [[ ${INSTALL_CERT} == "INSTALL" ]]; then
-    if [[ ${OS_TYPE} == "mac" ]]; then
+  if [[ "${INSTALL_CERT}" == "INSTALL" ]]; then
+    if [[ "${OS_TYPE}" == "mac" ]]; then
       local INSTALLED_CERT="$(security find-certificate -a -p -c "${ENV_HOST}")"
     else
-      local INSTALLED_CERT="$(powershell -f ${ROOT_DIR}/tools/scripts/find-cert.ps1 -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt")"
+      local INSTALLED_CERT="$(powershell -f "${ROOT_DIR}/tools/scripts/find-cert.ps1" -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt")"
     fi
   fi
 
   if [[ ! -f "src/cert/${ENV_HOST}.crt" ]]; then
     echo "Creating certificate..."
-    mkdir -p ${CERTS_DIR}
+    mkdir -p "${CERTS_DIR}"
     rm -f "${CERTS_DIR}/${ENV_HOST}.key" "${CERTS_DIR}/${ENV_HOST}.crt"
 
     echo "" > "${CERTS_DIR}/${ENV_HOST}.conf"
@@ -424,16 +424,16 @@ function install_certificates () {
     local INSTALLED_CERT=""
   fi
 
-  if [[ ${INSTALL_CERT} == "INSTALL" ]] && [[ ! ${INSTALLED_CERT} ]]; then
+  if [[ "${INSTALL_CERT}" == "INSTALL" ]] && [[ ! "${INSTALLED_CERT}" ]]; then
     echo "Installing certificate..."
-    if [[ ${OS_TYPE} == "mac" ]]; then
+    if [[ "${OS_TYPE}" == "mac" ]]; then
       local FOUND_CERT="$(security find-certificate -a -p -c "${ENV_HOST}")"
-      if [[ ${FOUND_CERT} ]]; then
+      if [[ "${FOUND_CERT}" ]]; then
         sudo security delete-certificate -c "${ENV_HOST}"
       fi
-      sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERTS_DIR}/${ENV_HOST}.crt"
+      sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" "${CERTS_DIR}/${ENV_HOST}.crt"
     else
-      powershell -f ${ROOT_DIR}/tools/scripts/install-cert.ps1 -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt"
+      powershell -f "${ROOT_DIR}/tools/scripts/install-cert.ps1" -certName:"${ENV_HOST} certificate" -certPath:"${CERTS_DIR}/${ENV_HOST}.crt"
     fi
   fi
 }
@@ -449,7 +449,7 @@ function create_host_entries () {
   local ENV_TYPE="${1}"
   local APP_HOST="${2}"
 
-  local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
+  local ENV_HOST_PREFIX="$(get_env_host_prefix "${ENV_TYPE}")"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
   local OS_TYPE="$(get_os_type)"
@@ -457,21 +457,21 @@ function create_host_entries () {
   local HOSTS_FILE="C:/Windows/System32/drivers/etc/hosts"
   local LOCALHOST_IP="127.0.0.1"
 
-  if [[ -f ${HOSTS_FILE} ]]; then
+  if [[ -f "${HOSTS_FILE}" ]]; then
     set +e
     local CUR_IP="$(cat "${HOSTS_FILE}" 2>/dev/null | grep " ${ENV_HOST}")"
     set -e
 
-    if [[ ! ${CUR_IP} ]]; then
-      if [[ ${OS_TYPE} == "mac" ]]; then
+    if [[ ! "${CUR_IP}" ]]; then
+      if [[ "${OS_TYPE}" == "mac" ]]; then
         sudo chmod g+w "${HOSTS_FILE}"
       fi
 
       echo "Adding host file entry..."
       echo "${LOCALHOST_IP} ${ENV_HOST}" >> "${HOSTS_FILE}"
 
-    elif [[ ${CUR_IP} != "${LOCALHOST_IP} ${ENV_HOST}" ]]; then
-      if [[ ${OS_TYPE} == "mac" ]]; then
+    elif [[ "${CUR_IP}" != "${LOCALHOST_IP} ${ENV_HOST}" ]]; then
+      if [[ "${OS_TYPE}" == "mac" ]]; then
         sudo chmod g+w "${HOSTS_FILE}"
       fi
 
@@ -499,12 +499,12 @@ function launch_server () {
   local APP_GA_TRACKING_ID="${7}"
   local RESPAWN="${8}"
 
-  local ENV_TYPE_FULL="$(get_env_type_full ${ENV_TYPE})"
+  local ENV_TYPE_FULL="$(get_env_type_full "${ENV_TYPE}")"
 
-  local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
+  local ENV_HOST_PREFIX="$(get_env_host_prefix "${ENV_TYPE}")"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
-  local SOCKET_HTTPS_PORT=$(get_socket_https_port ${ENV_TYPE} ${APP_PORT_IDX})
+  local SOCKET_HTTPS_PORT=$(get_socket_https_port "${ENV_TYPE}" "${APP_PORT_IDX}")
 
   local SERVER_FOLDER="./src/server"
   local SERVER_FILE="${SERVER_FOLDER}/server.ts"
@@ -533,7 +533,7 @@ function launch_server () {
   echo "Launching server..."
 
   local NODE_ARGS="--no-notify"
-  if [[ ${RESPAWN} ]]; then
+  if [[ "${RESPAWN}" ]]; then
     local NODE_ARGS="${NODE_ARGS} --respawn"
   fi
 
@@ -544,9 +544,9 @@ function launch_server () {
   APP_ENV_TYPE=${ENV_TYPE_FULL} \
   APP_SERVER_MAIL_FROM=${APP_SERVER_MAIL_FROM} \
   APP_GA_TRACKING_ID=${APP_GA_TRACKING_ID} \
-  yarn ts-node-dev ${NODE_ARGS} "${SERVER_FILE}" &
+  yarn ts-node-dev "${NODE_ARGS}" "${SERVER_FILE}" &
 
-  if [[ ${RESPAWN} ]]; then
+  if [[ "${RESPAWN}" ]]; then
     sleep 20;
     while [[ "$(_healthcheck)" == "FAIL"* ]]; do
         echo "Server needs to be reloaded"
@@ -571,12 +571,12 @@ function terminate_server () {
   local APP_HOST="${2}"
   local APP_PORT_IDX="${3}"
 
-  local ENV_TYPE_FULL="$(get_env_type_full ${ENV_TYPE})"
+  local ENV_TYPE_FULL="$(get_env_type_full "${ENV_TYPE}")"
 
-  local ENV_HOST_PREFIX="$(get_env_host_prefix ${ENV_TYPE})"
+  local ENV_HOST_PREFIX="$(get_env_host_prefix "${ENV_TYPE}")"
   local ENV_HOST="${ENV_HOST_PREFIX}${APP_HOST}"
 
-  local SOCKET_HTTPS_PORT=$(get_socket_https_port ${ENV_TYPE} ${APP_PORT_IDX})
+  local SOCKET_HTTPS_PORT=$(get_socket_https_port "${ENV_TYPE}" "${APP_PORT_IDX}")
 
   local SERVER_FOLDER="./src/server"
   local SERVER_FILE="${SERVER_FOLDER}/server.ts"

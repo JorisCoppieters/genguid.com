@@ -1,7 +1,6 @@
 const { optimize } = require('webpack');
 const common = require('./webpack.common.js');
 const { merge } = require('webpack-merge');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
 const TerserJSPlugin = require('terser-webpack-plugin');
 
@@ -10,9 +9,9 @@ const rootFolder = path.join(__dirname, '../../../');
 module.exports = merge(common, {
     mode: 'production',
     optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
+        minimizer: [new TerserJSPlugin({})],
     },
-    plugins: [new optimize.AggressiveMergingPlugin(), new optimize.OccurrenceOrderPlugin()],
+    plugins: [new optimize.AggressiveMergingPlugin()],
     module: {
         rules: [
             {

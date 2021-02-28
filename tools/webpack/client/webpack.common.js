@@ -82,6 +82,7 @@ module.exports = {
         publicPath: '',
         path: path.join(rootFolder, 'dist/client'),
         filename: '[name][hash].js',
+        chunkFilename: '[id].[chunkhash].js'
     },
     resolve: {
         extensions: ['.ts', '.js'],

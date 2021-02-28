@@ -79,6 +79,7 @@ module.exports = {
         ],
     },
     output: {
+        publicPath: '',
         path: path.join(rootFolder, 'dist/client'),
         filename: '[name][hash].js',
     },

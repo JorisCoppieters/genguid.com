@@ -30,13 +30,13 @@
       "node_modules/@types"
     ]
   },
-  "include": [
-    "**/*.ts"
-  ],
   "exclude": [
     "node_modules",
     "src/client/env/config.dev.ts",
     "src/client/env/config.test.ts",
     "src/client/env/config.prod.ts",
-  ]
+  ],
+  "include": [
+    "**/*.ts"
+  ],
 }

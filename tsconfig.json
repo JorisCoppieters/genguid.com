@@ -1,8 +1,8 @@
 {
-  "extends": "./tsconfig.check.json",
   "exclude": [
     "**/*.spec.ts",
     "src/client",
     "src/tests/**/*.ts"
-  ]
+  ],
+  "extends": "./tsconfig.check.json"
 }

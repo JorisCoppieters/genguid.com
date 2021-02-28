@@ -80,7 +80,7 @@ if [[ -d ./src/client/app ]]; then
     yarn ng serve &
 elif [[ -d ./src/client ]]; then
     echo "Launching client..."
-    webpack_env="dev" yarn webpack-dev-server \
+    webpack_env="dev" yarn webpack serve \
         --config tools/webpack/client/webpack.dev.js \
         --inline \
         --hot \

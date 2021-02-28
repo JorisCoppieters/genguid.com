@@ -4,7 +4,6 @@ require('toris-format');
 require('ts-node-dev');
 require('tslib');
 require('webpack-dev-server');
-require('webpack-dev-middleware');
 require('webpack-cli');
 require('css-loader');
 require('extract-loader');

@@ -86,20 +86,20 @@ module.exports = {
         extensions: ['.ts', '.js'],
     },
     plugins: [
-        new SitemapPlugin(
-            `https://${host}`,
-            [
+        new SitemapPlugin({
+            base: `https://${host}`,
+            paths: [
                 {
                     path: '/',
                     lastmod: '2020-01-01',
-                    priority: '1',
+                    priority: 1,
                     changefreq: 'yearly',
                 },
             ],
-            {
+            options: {
                 skipgzip: true,
             }
-        ),
+        }),
         new RobotstxtPlugin({
             policy: [
                 {

@@ -1,41 +1,8 @@
 {
-  "compilerOptions": {
-    "alwaysStrict": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "./dist",
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
-  },
   "exclude": [
-    "node_modules",
     "**/*.spec.ts",
     "src/client",
-    "src/client/e2e"
+    "src/tests/**/*.ts"
   ],
-  "include": [
-    "**/*.ts"
-  ]
+  "extends": "./tsconfig.check.json"
 }

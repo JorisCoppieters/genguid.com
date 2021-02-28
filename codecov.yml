@@ -1,0 +1,5 @@
+codecov:
+  token: 117df317-1b7a-448d-a012-05c839cc5230
+coverage:
+  status:
+    patch: off

@@ -1,0 +1,134 @@
+name: Checks for release
+
+on:
+  push:
+    branches: ['release']
+  pull_request:
+    branches: ['release']
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set host entry
+        run: sudo echo "127.0.0.1 genguid.com www.genguid.com" | sudo tee -a /etc/hosts
+
+      - name: Install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get --only-upgrade install google-chrome-stable
+          google-chrome --version
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run e2e tests
+        run: yarn test:e2e:ci
+
+      - name: Run client tests
+        run: yarn test:client
+
+      - name: Run core tests
+        run: yarn test:core
+
+      - name: Run coverage check
+        run: yarn coverage
+
+  run-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run lint check
+        run: yarn lint
+
+  run-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run formatter
+        run: yarn format
+
+  check-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Check all
+        run: yarn check:all:ci

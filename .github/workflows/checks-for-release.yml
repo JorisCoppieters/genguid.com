@@ -13,9 +13,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set host entry
-        run: sudo echo "127.0.0.1 genguid.com www.genguid.com" | sudo tee -a /etc/hosts
-
       - name: Install node.js
         uses: actions/setup-node@v1
         with:

@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "color-print": "^1.0.2",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "tslib": "^2.1.0"
     },
     "description": "Generate GUIDs",
     "devDependencies": {
@@ -49,7 +50,6 @@
         "ts-node": "^9.1.1",
         "ts-node-dev": "^1.1.6",
         "ts-unused-exports": "^7.0.3",
-        "tslib": "^2.1.0",
         "typescript": "^3.9.7",
         "webpack": "^5.24.2",
         "webpack-cli": "^4.5.0",

@@ -212,8 +212,8 @@ function get_dist_zip_name () {
   fi
 
   local ENV_TYPE="${1}"
-  local APP_NAME="${3}"
-  local CURRENT_DATE_STAMP="${4}"
+  local APP_NAME="${2}"
+  local CURRENT_DATE_STAMP="${3}"
   local DIST_ZIP="dist-${APP_NAME}-${ENV_TYPE}-${CURRENT_DATE_STAMP}.zip"
 
   echo -n "${DIST_ZIP}"
@@ -228,8 +228,8 @@ function get_remote_script_name () {
   fi
 
   local ENV_TYPE="${1}"
-  local APP_NAME="${3}"
-  local CURRENT_DATE_STAMP="${4}"
+  local APP_NAME="${2}"
+  local CURRENT_DATE_STAMP="${3}"
   local REMOTE_SCRIPT="deploy-${APP_NAME}-${ENV_TYPE}-${CURRENT_DATE_STAMP}.sh"
 
   echo -n "${REMOTE_SCRIPT}"
@@ -544,7 +544,7 @@ function launch_server () {
   APP_ENV_TYPE=${ENV_TYPE_FULL} \
   APP_SERVER_MAIL_FROM=${APP_SERVER_MAIL_FROM} \
   APP_GA_TRACKING_ID=${APP_GA_TRACKING_ID} \
-  yarn ts-node-dev "${NODE_ARGS}" "${SERVER_FILE}" &
+  yarn ts-node-dev ${NODE_ARGS} "${SERVER_FILE}" &
 
   if [[ "${RESPAWN}" ]]; then
     sleep 20;

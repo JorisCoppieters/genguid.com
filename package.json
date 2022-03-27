@@ -36,7 +36,7 @@
         "istanbul-merge": "^1.1.1",
         "jasmine-spec-reporter": "~6.0.0",
         "jest": "^26.6.3",
-        "minimist": "^1.2.5",
+        "minimist": "^1.2.6",
         "npm-check": "^5.9.2",
         "npm-check-updates": "^11.1.9",
         "nyc": "^15.1.0",

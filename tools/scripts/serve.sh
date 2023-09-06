@@ -100,7 +100,7 @@ if [[ -d "./src/client/app" ]]; then
     # npx ng serve &
     npx ng build --watch --configuration development &
 
-elif [[ -d "./src/client/index" ]]; then
+elif [[ -f "./src/client/index.ts" ]]; then
     # set +x
     echo ""
     echo "#"
@@ -109,7 +109,7 @@ elif [[ -d "./src/client/index" ]]; then
     echo ""
     # set -x
 
-    vite --host $ENV_HOST --port $HTTPS_PORT "./src/client/index"
+    vite --host $ENV_HOST --port $HTTPS_PORT "./src/client"
 
 elif [[ -d "./src/client" ]]; then
     ENV_URL="./src/client"

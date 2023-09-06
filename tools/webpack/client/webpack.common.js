@@ -1,4 +1,4 @@
-// const { CheckerPlugin } = require('awesome-typescript-loader');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const RobotstxtPlugin = require('robotstxt-webpack-plugin');
@@ -63,19 +63,19 @@ module.exports = {
                     },
                 ],
             },
-            // {
-            //     test: /\.ts?$/,
-            //     include: [path.join(rootFolder, 'src/client')],
-            //     exclude: /node_modules/,
-            //     use: [
-            //         {
-            //             loader: 'awesome-typescript-loader',
-            //             options: {
-            //                 configFileName: path.join(rootFolder, './tsconfig.json'),
-            //             },
-            //         },
-            //     ],
-            // },
+            {
+                test: /\.ts?$/,
+                include: [path.join(rootFolder, 'src/client')],
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'awesome-typescript-loader',
+                        options: {
+                            configFileName: path.join(rootFolder, './tsconfig.json'),
+                        },
+                    },
+                ],
+            },
         ],
     },
     output: {
@@ -113,7 +113,7 @@ module.exports = {
             sitemap: `https://${host}/sitemap.xml`,
             host: host,
         }),
-        // new CheckerPlugin(),
+        new CheckerPlugin(),
         new HtmlWebPackPlugin({
             template: path.join(rootFolder, 'src/client/index/index.html'),
             filename: './index.html',

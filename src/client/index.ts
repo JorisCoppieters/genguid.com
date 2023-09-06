@@ -1,8 +1,7 @@
 import { v4 as uuidV4 } from 'uuid';
 
-import '../imports/favicons';
+import './imports/favicons';
 import './index.css';
-import './index.html';
 
 // ******************************
 // Script:

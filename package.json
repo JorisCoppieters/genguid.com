@@ -15,7 +15,8 @@
     "dependencies": {
         "color-print": "^1.0.2",
         "tslib": "^2.1.0",
-        "uuid": "^8.3.2"
+        "uuid": "^8.3.2",
+        "yarn": "^1.22.19"
     },
     "description": "Generate GUIDs",
     "devDependencies": {

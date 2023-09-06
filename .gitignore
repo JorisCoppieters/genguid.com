@@ -1,14 +1,17 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
+/dist-app
+/dist-db
 /dist-all
+/dist-zip
+/rollback-app
+/rollback-db
 /tmp
 /out-tsc
 
 # dependencies
 /node_modules
-package-lock.json
 
 # IDEs and editors
 /.idea
@@ -29,6 +32,8 @@ package-lock.json
 # misc
 /.sass-cache
 /connect.lock
+/performance
+.lighthouseci
 /coverage
 /coverage.release
 /.coverage
@@ -36,8 +41,9 @@ package-lock.json
 npm-debug.log
 testem.log
 /typings
-yarn-error.log
+npm-error.log
 debug.log
+.angular
 
 # e2e
 /e2e/*.js
@@ -52,6 +58,10 @@ Thumbs.db
 
 # Other
 data
-data.bak
+data_backup
 src/cert/*.crt
 src/cert/*.key
+logs
+logs.test
+logs.archive
+exports

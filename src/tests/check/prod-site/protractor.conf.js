@@ -6,7 +6,7 @@ const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
 exports.config = {
     directConnect: true,
     baseUrl: 'https://genguid.com',
-    specs: ['./**/*.spec.ts'],
+    specs: ['../../e2e/**/*.spec.ts'],
     framework: 'jasmine',
     jasmineNodeOpts: {
         showColors: true,

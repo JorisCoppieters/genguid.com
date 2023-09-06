@@ -4,7 +4,7 @@ module.exports = {
         '^.+\\.ts?$': 'ts-jest',
     },
     testRegex: '.test.ts$',
-    testPathIgnorePatterns: ['test/', 'src/client/test.ts', 'src/client/app', 'src/client/env/config.(base|dev|test|prod).ts', 'src/tests'],
+    testPathIgnorePatterns: ['test/', 'src/client/app', 'src/shared/env/config.(base|dev|test|prod).ts', 'src/tests'],
     moduleFileExtensions: ['ts', 'js'],
     collectCoverage: true,
     coverageReporters: ['json'],

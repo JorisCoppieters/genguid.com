@@ -4,7 +4,7 @@
 
 export function toTitleCase(in_value: string) {
     return _toSegments(in_value)
-        .map((seg) => seg.substr(0, 1).toUpperCase() + seg.substr(1))
+        .map((seg) => seg.slice(0, 1).toUpperCase() + seg.slice(1))
         .join(' ');
 }
 
@@ -12,7 +12,7 @@ export function toTitleCase(in_value: string) {
 
 export function toPascalCase(in_value: string) {
     return _toSegments(in_value)
-        .map((seg) => seg.substr(0, 1).toUpperCase() + seg.substr(1))
+        .map((seg) => seg.slice(0, 1).toUpperCase() + seg.slice(1))
         .join('');
 }
 
@@ -20,7 +20,7 @@ export function toPascalCase(in_value: string) {
 
 export function toCamelCase(in_value: string) {
     const pascalCase = toPascalCase(in_value);
-    return pascalCase.substr(0, 1).toLowerCase() + pascalCase.substr(1);
+    return pascalCase.slice(0, 1).toLowerCase() + pascalCase.slice(1);
 }
 
 // ******************************
@@ -73,6 +73,102 @@ export function centerPad(in_value: string, in_pad: string, in_padAmount: number
 
 // ******************************
 
+// export function toCurrencyString(in_value: number): string {
+//     if (isNaN(in_value)) {
+//         throw new Error(`Value isn't a number`);
+//     }
+
+//     const negative = in_value <= -0.01;
+//     const absVal = Math.abs(in_value);
+//     const fullValue = dollarRound(absVal);
+//     const decimalValue = dollarRound((absVal - fullValue) * 100);
+//     const stringValue = `$${Number(fullValue).toLocaleString()}.${('00' + decimalValue).slice(-2)}`;
+//     return negative ? `(${stringValue})` : `${stringValue}`;
+// }
+
+// ******************************
+
+export function fromCurrencyString(in_value: string): number {
+    let match;
+    let parsedValue = (`${in_value}` || '').replace(/[,]/g, '').replace(/[$]/, '');
+
+    match = parsedValue.match(/^(.+)\*(.+)$/);
+    if (match) {
+        return (fromCurrencyString(match[1]) || 0) * (fromCurrencyString(match[2]) || 0);
+    }
+
+    match = parsedValue.match(/^(.+)\/(.+)$/);
+    if (match) {
+        return (fromCurrencyString(match[1]) || 0) / (fromCurrencyString(match[2]) || 1);
+    }
+
+    match = parsedValue.match(/^(.+)\+(.+)$/);
+    if (match) {
+        return (fromCurrencyString(match[1]) || 0) + (fromCurrencyString(match[2]) || 0);
+    }
+
+    match = parsedValue.match(/^(.+)\-(.+)$/);
+    if (match) {
+        return (fromCurrencyString(match[1]) || 0) - (fromCurrencyString(match[2]) || 0);
+    }
+
+    const negative = parsedValue.match(/^\(.*\)$/);
+    if (negative) {
+        parsedValue = parsedValue.replace(/^\((.*)\)$/, '$1');
+    }
+
+    const numValue = parseFloat(parsedValue);
+    if (isNaN(numValue)) {
+        return 0;
+    } else {
+        return bankersRound((negative ? -1 : 1) * numValue);
+    }
+}
+
+// ******************************
+
+export function toPercentageString(in_value: number): string {
+    if (isNaN(in_value)) {
+        throw new Error(`Value isn't a number`);
+    }
+
+    const value = in_value * 100;
+    const negative = value <= -0.01;
+    const fullValue = Math.abs(dollarRound(value));
+    const decimalValue = Math.abs(dollarRound(value * 100 - fullValue * 100));
+    const stringValue = `${Number(fullValue).toLocaleString()}.${('00' + decimalValue).slice(-2)}%`;
+    return negative ? `(${stringValue})` : `${stringValue}`;
+}
+
+// ******************************
+
+export function toWholePercentageString(in_value: number): string {
+    const value = in_value * 100;
+    const negative = value <= -1;
+    const fullValue = Math.abs(dollarRound(value));
+    const stringValue = `${Number(fullValue).toLocaleString()}%`;
+    return negative ? `(${stringValue})` : `${stringValue}`;
+}
+
+// ******************************
+
+export function fromPercentageString(in_value: string): number {
+    let parsedValue = (`${in_value}` || '').replace(/[,]/g, '').replace(/[%]/, '');
+    const negative = parsedValue.match(/^\(.*\)$/);
+    if (negative) {
+        parsedValue = parsedValue.replace(/^\((.*)\)$/, '$1');
+    }
+
+    const numValue = parseFloat(parsedValue);
+    if (isNaN(numValue)) {
+        return 0;
+    } else {
+        return ((negative ? -1 : 1) * numValue) / 100;
+    }
+}
+
+// ******************************
+
 export function trimObject(in_data: any) {
     let data = in_data;
     const dataType = typeof data;
@@ -98,68 +194,6 @@ export function trimObject(in_data: any) {
     }
 
     return data;
-}
-
-// ******************************
-
-export function fromCurrencyString(in_value: string): number {
-    let match;
-    let parsedValue = (`${in_value}` || '').replace(/[,]/g, '').replace(/[$]/, '');
-
-    let addition = 0;
-    match = parsedValue.match(/^(.+)\+(.+)$/);
-    if (match) {
-        parsedValue = match[1];
-        addition = parseFloat(match[2]);
-        if (isNaN(addition)) {
-            addition = 0;
-        }
-    }
-
-    let subtraction = 0;
-    match = parsedValue.match(/^(.+)\-(.+)$/);
-    if (match) {
-        parsedValue = match[1];
-        subtraction = parseFloat(match[2]);
-        if (isNaN(subtraction)) {
-            subtraction = 0;
-        }
-    }
-
-    const negative = parsedValue.match(/^\(.*\)$/);
-    if (negative) {
-        parsedValue = parsedValue.replace(/^\((.*)\)$/, '$1');
-    }
-
-    let numValue = parseFloat(parsedValue);
-    if (isNaN(numValue)) {
-        return 0;
-    } else {
-        if (negative) {
-            numValue += subtraction - addition;
-        } else {
-            numValue += addition - subtraction;
-        }
-
-        return (negative ? -1 : 1) * numValue;
-    }
-}
-
-// ******************************
-
-export function fromPercentageString(in_value: string): number {
-    let parsedValue = (`${in_value}` || '').replace(/[,]/g, '').replace(/[%]/, '');
-    const negative = parsedValue.match(/^\(.*\)$/);
-    if (negative) {
-        parsedValue = parsedValue.replace(/^\((.*)\)$/, '$1');
-    }
-
-    const numValue = parseFloat(parsedValue);
-    if (isNaN(numValue)) {
-        return 0;
-    } else {
-        return (negative ? -1 : 1) * numValue;
-    }
 }
 
 // ******************************

@@ -8,6 +8,12 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     module: {
+        devServer: {
+            https: {
+                cert: path.join(rootFolder, 'src/cert/dev.genguid.com.crt'),
+                key: path.join(rootFolder, 'src/cert/dev.genguid.com.key')
+            },
+        },
         rules: [
             {
                 test: /\.css$/,

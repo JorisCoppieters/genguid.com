@@ -1,6 +1,7 @@
 {
     "allow_arbitrary_closing_html_tags": true,
     "allow_empty_files": true,
+    "add_noopener_noreferrer": true,
     "block_elements": [
         "tg-icon"
     ],
@@ -8,6 +9,8 @@
     "definition_type": "HTML",
     "format_multi_classes_with_at_least": 3,
     "ignore_paths": [
+        "src/client/index/index.html",
+        "src/client/index.html",
         "node_modules/",
         "tools/"
     ],

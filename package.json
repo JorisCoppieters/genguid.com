@@ -109,7 +109,6 @@
         "predeploy": "npm run update:webdriver && npm run test && npm run coverage",
         "preserve": "npm run config:files && npm run lint -- --fix && npm run format -- --fix",
         "pretest:e2e:ci": ":",
-        "preview": "vite preview",
         "rollback": "bash ./tools/scripts/rollback.sh",
         "rollback:db": "bash ./tools/scripts/rollback-database.sh",
         "serve": "bash ./tools/scripts/serve.sh dev",

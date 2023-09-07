@@ -159,29 +159,32 @@ if [[ -d "./src/client/app" ]]; then
     else
         npx ng build --configuration development
     fi
-elif [[ -d "./src/client" ]]; then
-    WEBPACK_CONFIG=$(get_webpack_config "${ENV_TYPE}")
-    webpack_env="${ENV_TYPE}" webpack --config "tools/webpack/client/webpack.${WEBPACK_CONFIG}.js"
-    rm -f "${DIST_FOLDER}/client/"*.js.LICENSE.txt
+elif [[ -f "./src/client/vite.config.ts" ]]; then
+    vite -c "./src/client/vite.config.ts" build
+
+    # WEBPACK_CONFIG=$(get_webpack_config "${ENV_TYPE}")
+    # webpack_env="${ENV_TYPE}" webpack --config "tools/webpack/client/webpack.${WEBPACK_CONFIG}.js"
+    # rm -f "${DIST_FOLDER}/client/"*.js.LICENSE.txt
+
 elif [[ -d "./src" ]]; then
     mkdir -p "${DIST_FOLDER}"
     cp -r "src" "${DIST_FOLDER}/client"
 fi
 
-if [[ -d "./src/extension" ]]; then
-    node "tools/manifest/build.js"
-    WEBPACK_CONFIG=$(get_webpack_config "${ENV_TYPE}")
-    webpack_env=$ENV_TYPE webpack --config "tools/webpack/extension/webpack.$WEBPACK_CONFIG.js"
+# if [[ -d "./src/extension" ]]; then
+#     node "tools/manifest/build.js"
+#     WEBPACK_CONFIG=$(get_webpack_config "${ENV_TYPE}")
+#     webpack_env=$ENV_TYPE webpack --config "tools/webpack/extension/webpack.$WEBPACK_CONFIG.js"
 
-    cd "${DIST_FOLDER}/extension"
-    rm -f *.js.LICENSE.txt
+#     cd "${DIST_FOLDER}/extension"
+#     rm -f *.js.LICENSE.txt
 
-    zip -r "$EXTENSION_ZIP" "."
-    mv "$EXTENSION_ZIP" "../../"
-    cd "../../"
+#     zip -r "$EXTENSION_ZIP" "."
+#     mv "$EXTENSION_ZIP" "../../"
+#     cd "../../"
 
-    rm -rf "${DIST_FOLDER}/extension"
-fi
+#     rm -rf "${DIST_FOLDER}/extension"
+# fi
 
 cp -r \
     "./tools/scripts/apache2/http.conf" \

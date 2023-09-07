@@ -153,17 +153,17 @@ if [[ -d "./src/server" ]]; then
         "${RESPAWN}"
 fi
 
-if [[ -d "./src/extension" ]]; then
-    # set +x
-    echo ""
-    echo "#"
-    echo "# Launching extension..."
-    echo "#"
-    echo ""
-    # set -x
+# if [[ -d "./src/extension" ]]; then
+#     # set +x
+#     echo ""
+#     echo "#"
+#     echo "# Launching extension..."
+#     echo "#"
+#     echo ""
+#     # set -x
 
-    node "tools/manifest/build.js"
-    webpack_env="dev" npx webpack --config "./tools/webpack/extension/webpack.dev.js" -w &
-fi
+#     node "tools/manifest/build.js"
+#     webpack_env="dev" npx webpack --config "./tools/webpack/extension/webpack.dev.js" -w &
+# fi
 
 echo "Done!"

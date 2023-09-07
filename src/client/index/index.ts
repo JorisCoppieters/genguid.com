@@ -1,6 +1,12 @@
 import { v4 as uuidV4 } from 'uuid';
 
+import '../css/fontawesome/brands.css';
+import '../css/fontawesome/fontawesome.css';
+import '../css/fontawesome/solid.css';
+import '../css/js-content.css';
+import '../css/js-footer.css';
 import '../imports/favicons';
+import './index.css';
 
 // ******************************
 // Script:

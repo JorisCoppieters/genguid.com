@@ -24,7 +24,6 @@ const testPortGroup = 6000;
 const devPortGroup = 8000;
 const portIdx = config.portIdx;
 
-export const HTTP_PORT = (isProd ? prodPortGroup : isTest ? testPortGroup : devPortGroup) + portIdx * 10;
 export const HTTPS_PORT = (isProd ? prodPortGroup : isTest ? testPortGroup : devPortGroup) + portIdx * 10 + 1;
 
 // ******************************

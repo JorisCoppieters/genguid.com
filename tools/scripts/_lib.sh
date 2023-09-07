@@ -262,23 +262,23 @@ function highlight () {
 
 ##################################################
 
-function get_webpack_config () {
-  if [[ $# -lt 1 ]]; then
-    echo "Usage: get_webpack_config [ENV_TYPE]";
-    exit 1;
-  fi
+# function get_webpack_config () {
+#   if [[ $# -lt 1 ]]; then
+#     echo "Usage: get_webpack_config [ENV_TYPE]";
+#     exit 1;
+#   fi
 
-  local ENV_TYPE="${1}"
+#   local ENV_TYPE="${1}"
 
-  local WEBPACK_CONFIG="dev"
-  if [[ "${ENV_TYPE}" == "test" ]]; then
-    local WEBPACK_CONFIG="prod"
-  elif [[ "${ENV_TYPE}" == "prod" ]]; then
-    local WEBPACK_CONFIG="prod"
-  fi
+#   local WEBPACK_CONFIG="dev"
+#   if [[ "${ENV_TYPE}" == "test" ]]; then
+#     local WEBPACK_CONFIG="prod"
+#   elif [[ "${ENV_TYPE}" == "prod" ]]; then
+#     local WEBPACK_CONFIG="prod"
+#   fi
 
-  echo -n "${WEBPACK_CONFIG}"
-}
+#   echo -n "${WEBPACK_CONFIG}"
+# }
 
 ##################################################
 

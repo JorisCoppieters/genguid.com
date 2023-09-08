@@ -40,7 +40,7 @@ jobs:
               run: TZ=
 
             - name: Install dependencies
-              run: npm install
+              run: npm install --no-fund --no-audit
 
             - name: Run e2e tests
               run: npm run test:e2e:ci
@@ -76,7 +76,7 @@ jobs:
                       ${{ runner.OS }}-
 
             - name: Install dependencies
-              run: npm install
+              run: npm install --no-fund --no-audit
 
             - name: Run lint check
               run: npm run lint
@@ -103,7 +103,7 @@ jobs:
                       ${{ runner.OS }}-
 
             - name: Install dependencies
-              run: npm install
+              run: npm install --no-fund --no-audit
 
             - name: Run formatter
               run: npm run format
@@ -130,7 +130,7 @@ jobs:
                       ${{ runner.OS }}-
 
             - name: Install dependencies
-              run: npm install
+              run: npm install --no-fund --no-audit
 
             - name: Check all
               run: npm run check:all:ci
@@ -165,6 +165,6 @@ jobs:
     #           ${{ runner.OS }}-
 
     #     - name: Install dependencies
-    #       run: npm install
+    #       run: npm install --no-fund --no-audit
 
     #     - run: npm run check:performance

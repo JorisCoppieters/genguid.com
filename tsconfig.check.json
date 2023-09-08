@@ -30,12 +30,14 @@
             "node_modules/@types"
         ],
         "skipLibCheck": true,
-        // "module": "commonjs",
-        // "moduleResolution": "node",
+        /*
+        "module": "commonjs",
+        "moduleResolution": "node",
+        */
         /* Bundler mode */
         "module": "ESNext",
         "moduleResolution": "bundler",
-        // "allowImportingTsExtensions": true,
+        "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,

@@ -16,12 +16,6 @@ if [[ ! "${APP_VERSION}" ]]; then echo "npm_package_version isn't set!"; exit -1
 APP_NAME=$npm_package_name
 if [[ ! "${APP_NAME}" ]]; then echo "npm_package_name isn't set!"; exit -1; fi
 
-APP_TITLE=$npm_package_config_title
-if [[ ! "${APP_TITLE}" ]]; then echo "npm_package_config_title isn't set!"; exit -1; fi
-
-APP_SLOGAN=$npm_package_config_slogan
-if [[ ! "${APP_SLOGAN}" ]]; then echo "npm_package_config_slogan isn't set!"; exit -1; fi
-
 APP_PORT_IDX=$npm_package_config_port_idx
 if [[ ! "${APP_PORT_IDX}" ]]; then echo "npm_package_config_port_idx isn't set!"; exit -1; fi
 
@@ -30,29 +24,25 @@ if [[ ! "${APP_PORT_IDX}" ]]; then echo "npm_package_config_port_idx isn't set!"
 #
 
 SERVICE_NAME=$npm_package_config_service_name
-if [[ ! "${SERVICE_NAME}" ]]; then
-    SERVICE_NAME=""
-fi
+if [[ ! "${SERVICE_NAME}" ]]; then SERVICE_NAME=""; fi
+
+APP_TITLE=$npm_package_config_title
+if [[ ! "${APP_TITLE}" ]]; then APP_TITLE=""; fi
+
+APP_SLOGAN=$npm_package_config_slogan
+if [[ ! "${APP_SLOGAN}" ]]; then APP_SLOGAN=""; fi
 
 APP_SERVER_MAIL_FROM=$npm_package_config_server_mail_from
-if [[ ! "${APP_SERVER_MAIL_FROM}" ]]; then
-    APP_SERVER_MAIL_FROM="jobot.software@gmail.com"
-fi
+if [[ ! "${APP_SERVER_MAIL_FROM}" ]]; then APP_SERVER_MAIL_FROM="jobot.software@gmail.com"; fi
 
 APP_ENQUIRIES_MAIL_TO=$npm_package_config_enquiries_mail_to
-if [[ ! "${APP_ENQUIRIES_MAIL_TO}" ]]; then
-    APP_ENQUIRIES_MAIL_TO="jobot.software@gmail.com"
-fi
+if [[ ! "${APP_ENQUIRIES_MAIL_TO}" ]]; then APP_ENQUIRIES_MAIL_TO="jobot.software@gmail.com"; fi
 
 APP_GA_TRACKING_ID=$npm_package_config_ga_tracking_id
-if [[ ! "${APP_GA_TRACKING_ID}" ]]; then
-    APP_GA_TRACKING_ID=""
-fi
+if [[ ! "${APP_GA_TRACKING_ID}" ]]; then APP_GA_TRACKING_ID=""; fi
 
 APP_TRELLO_BOARD_ID=$npm_package_config_trello_board_id
-if [[ ! "${APP_TRELLO_BOARD_ID}" ]]; then
-    APP_TRELLO_BOARD_ID=""
-fi
+if [[ ! "${APP_TRELLO_BOARD_ID}" ]]; then APP_TRELLO_BOARD_ID=""; fi
 
 ENV_TYPE=$(get_env_type "${1}")
 ENV_TYPE_FULL=$(get_env_type_full "${ENV_TYPE}")

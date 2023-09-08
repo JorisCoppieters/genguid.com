@@ -619,7 +619,7 @@ function set_config () {
   local APP_GA_TRACKING_ID="${10}"
   local APP_TRELLO_BOARD_ID="${11}"
   set +e
-  local APP_IP=$(ipconfig | grep IPv4 | tail -1 | cut -d ':' -f 2 | tr -d '[:space:]')
+  local APP_IP=$(ipconfig | grep IPv4 | grep 192.168 | tail -1 | cut -d ':' -f 2 | tr -d '[:space:]')
   set -e
 
   local CONFIG_FOLDER="./src/shared/env"

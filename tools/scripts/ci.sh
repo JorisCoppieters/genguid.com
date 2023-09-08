@@ -89,3 +89,5 @@ if [[ -d "./src/ci" ]]; then
         "${RESPAWN}" \
         "${CI_ARGS}"
 fi
+
+echo "Done!"

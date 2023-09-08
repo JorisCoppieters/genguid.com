@@ -1,5 +1,5 @@
-import { ENV_TYPE } from "../enums/env-type";
-import { config } from "./config";
+import { ENV_TYPE } from '../enums/env-type';
+import { config } from './config';
 
 // ******************************
 // Configuration:
@@ -7,10 +7,11 @@ import { config } from "./config";
 
 /* istanbul ignore file */
 
-const host = config.appHost
+const host = config.appHost;
 const envType = config.envType;
 const isProd = envType === ENV_TYPE.Production;
 const isTest = envType === ENV_TYPE.Test;
+export const IS_DEV = envType === ENV_TYPE.Development;
 const envShort = isProd ? 'prod' : isTest ? 'test' : 'dev';
 const envPrefix = isProd ? '' : `${envShort}.`;
 

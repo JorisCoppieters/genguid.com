@@ -13,6 +13,6 @@ export const config = {
     gaTrackingId: 'UA-51523185-4',
     logLevel: LOG_LEVEL.Info,
     trello: {
-        board_id: 'dkuCup3q'
+        board_id: 'dkuCup3q',
     },
 };

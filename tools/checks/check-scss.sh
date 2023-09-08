@@ -2,7 +2,7 @@
 
 found_unused=""
 
-scss_files=$(find ./src/ -type f -name "*.scss")
+scss_files=$(find ./src/ -type f -name "*.scss" -not -path "./src/client/app/scss/*")
 for f in ${scss_files}; do
     screen_statements=$(cat ${f} | grep '@media screen and [(]max-width:')
     screen_statements="$(echo "$screen_statements" \
@@ -62,7 +62,7 @@ if [[ -f .tmp.all.scss.txt ]]; then
     rm .tmp.all.scss.txt
 fi
 
-find ./src/ -type f -name "*.scss" -exec cat {} \; > .tmp.all.scss.txt
+find ./src/ -type f -name "*.scss" -not -path "./src/client/app/scss/*" -exec cat {} \; > .tmp.all.scss.txt
 
 cat .tmp.all.scss.txt \
     | grep -v "^ *//" \

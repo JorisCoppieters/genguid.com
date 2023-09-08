@@ -1,7 +1,7 @@
 import { LOG_LEVEL } from '../enums/log-level';
 
 export const config = {
-    appIp: '172.26.80.1',
+    appIp: '192.168.1.20',
     appHost: 'genguid.com',
     appVersion: '1.0.0',
     appTitle: '',
@@ -13,6 +13,6 @@ export const config = {
     gaTrackingId: 'UA-51523185-4',
     logLevel: LOG_LEVEL.Info,
     trello: {
-        board_id: 'dkuCup3q',
+        board_id: 'dkuCup3q'
     },
 };

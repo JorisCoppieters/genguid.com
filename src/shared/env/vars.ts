@@ -1,5 +1,5 @@
-import { ENV_TYPE } from '../enums/env-type';
 import { config } from './config';
+import { ENV_TYPE } from '../enums/env-type';
 
 // ******************************
 // Configuration:

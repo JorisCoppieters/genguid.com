@@ -108,7 +108,7 @@
         "test:manual": "bash ./tools/scripts/manual-tests.sh",
         "test:scripts:dev": "bash ./tools/scripts/test-scripts-dev.sh",
         "update": "ncu -u && npm prune",
-        "update:webdriver": "bash ./tools/scripts/update-webdriver.sh"
+        "update:webdriver": ":"
     },
     "version": "1.0.0"
 }

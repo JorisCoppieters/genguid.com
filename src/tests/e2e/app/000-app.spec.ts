@@ -35,7 +35,7 @@ describe('app', () => {
         expect(logs).not.toContain(
             jasmine.objectContaining({
                 level: logging.Level.SEVERE,
-            } as logging.Entry) as unknown as logging.Entry,
+            } as logging.Entry) as unknown as logging.Entry
         );
     });
 });

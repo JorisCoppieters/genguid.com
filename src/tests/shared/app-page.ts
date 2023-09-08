@@ -89,7 +89,7 @@ export class AppPage {
                 {
                     'Cache-Control': 'no-cache',
                 },
-                in_headers,
+                in_headers
             ),
             rejectUnauthorized: false,
             requestCert: true,

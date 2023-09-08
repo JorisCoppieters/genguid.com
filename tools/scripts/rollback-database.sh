@@ -59,8 +59,8 @@ ENV_TYPE_FULL=$(get_env_type_full "${ENV_TYPE}")
 
 CURRENT_DATESTAMP=$(get_current_date_stamp)
 
-DIST_TYPE="rollback-app"
-DIST_FOLDER="rollback-app"
+DIST_TYPE="rollback-db"
+DIST_FOLDER="rollback-db"
 REMOTE_SCRIPT="$(get_remote_script_name "${DIST_TYPE}" "${ENV_TYPE}" "${APP_NAME}" "${CURRENT_DATESTAMP}")"
 DEPLOY_HOST="$(get_deloy_host "${ENV_TYPE}" "${APP_NAME}")"
 
@@ -85,7 +85,7 @@ function _replace_vars () {
         "${DIST_TYPE}"
 }
 
-alert_user "${APP_NAME}" "Starting rollback on ${ENV_TYPE_FULL} now..."
+alert_user "${APP_NAME}" "Starting database rollback on ${ENV_TYPE_FULL} now..."
 
 # set +x
 echo ""
@@ -130,7 +130,7 @@ echo ""
 # set -x
 
 cd "${DIST_FOLDER}"
-cp -r "../tools/scripts/rollback-remote.sh" "${REMOTE_SCRIPT}"
+cp -r "../tools/scripts/rollback-database-remote.sh" "${REMOTE_SCRIPT}"
 _replace_vars "${REMOTE_SCRIPT}"
 chmod +x "${REMOTE_SCRIPT}"
 cd ../
@@ -208,20 +208,8 @@ if [[ "${ENV_TYPE}" != "dev" ]]; then
     # set -x
 
     rm -r "${DIST_FOLDER}"
-
-    # set +x
-    echo ""
-    echo "#"
-    echo "# Tag repository"
-    echo "#"
-    echo ""
-    # set -x
-
-    tag="rollback-${APP_NAME}-${ENV_TYPE}-${CURRENT_DATESTAMP}"
-    git tag -a "$tag" -m "Rolled back ${ENV_TYPE_FULL} to previous version"
-    git push origin "$tag"
 fi
 
 restore_config
 
-alert_user "${APP_NAME}" "Rollback on ${ENV_TYPE_FULL} complete!"
+alert_user "${APP_NAME}" "Database rollback on ${ENV_TYPE_FULL} complete!"

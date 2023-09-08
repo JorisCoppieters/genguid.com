@@ -1,131 +1,170 @@
 name: Checks for release
 
 on:
-  push:
-    branches: ['release']
-  pull_request:
-    branches: ['release']
+    push:
+        branches: ['release']
+    pull_request:
+        branches: ['release']
 
 jobs:
-  run-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+    run-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
 
-      - name: Install node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
+            - name: Set host entry
+              run: |
+                  if [[ ! $(sudo cat /etc/hosts | grep "${APP_HOST}") ]]; then
+                    sudo echo "127.0.0.1 dev.${APP_HOST} www.dev.${APP_HOST}" | sudo tee -a /etc/hosts;
+                  fi
+              env:
+                  APP_HOST: genguid.com
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            - name: Install node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
 
-      - name: Install chrome
-        run: |
-          sudo apt-get update
-          sudo apt-get --only-upgrade install google-chrome-stable
-          google-chrome --version
+            - name: Cache node modules
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.OS }}-build-${{ env.cache-name }}-
+                      ${{ runner.OS }}-build-
+                      ${{ runner.OS }}-
 
-      - name: Install dependencies
-        run: yarn install
+            - name: Set locale
+              run: TZ=
 
-      - name: Run e2e tests
-        run: yarn test:e2e:ci
+            - name: Install dependencies
+              run: npm install
 
-      - name: Run client tests
-        run: yarn test:client
+            - name: Run e2e tests
+              run: npm run test:e2e:ci
 
-      - name: Run core tests
-        run: yarn test:core
+            - name: Run client tests
+              run: npm run test:client
 
-      - name: Run coverage check
-        run: yarn coverage
+            - name: Run core tests
+              run: npm run test:core
 
-  run-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+            - name: Run coverage check
+              run: npm run coverage
 
-      - name: Install node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
+    run-lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            - name: Install node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
 
-      - name: Install dependencies
-        run: yarn install
+            - name: Cache node modules
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.OS }}-build-${{ env.cache-name }}-
+                      ${{ runner.OS }}-build-
+                      ${{ runner.OS }}-
 
-      - name: Run lint check
-        run: yarn lint
+            - name: Install dependencies
+              run: npm install
 
-  run-format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+            - name: Run lint check
+              run: npm run lint
 
-      - name: Install node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
+    run-format:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            - name: Install node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
 
-      - name: Install dependencies
-        run: yarn install
+            - name: Cache node modules
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.OS }}-build-${{ env.cache-name }}-
+                      ${{ runner.OS }}-build-
+                      ${{ runner.OS }}-
 
-      - name: Run formatter
-        run: yarn format
+            - name: Install dependencies
+              run: npm install
 
-  check-code:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+            - name: Run formatter
+              run: npm run format
 
-      - name: Install node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
+    check-code:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
+            - name: Install node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16.x
 
-      - name: Install dependencies
-        run: yarn install
+            - name: Cache node modules
+              uses: actions/cache@v3
+              with:
+                  path: node_modules
+                  key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.OS }}-build-${{ env.cache-name }}-
+                      ${{ runner.OS }}-build-
+                      ${{ runner.OS }}-
 
-      - name: Check all
-        run: yarn check:all:ci
+            - name: Install dependencies
+              run: npm install
+
+            - name: Check all
+              run: npm run check:all:ci
+
+    # check-performance:
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #     - name: Checkout repo
+    #       uses: actions/checkout@v3
+
+    #     - name: Set host entry
+    #       run: |
+    #         if [[ ! $(sudo cat /etc/hosts | grep "${APP_HOST}") ]]; then
+    #           sudo echo "127.0.0.1 dev.${APP_HOST} www.dev.${APP_HOST}" | sudo tee -a /etc/hosts;
+    #         fi
+    #       env:
+    #         APP_HOST: genguid.com
+
+    #     - name: Install node.js
+    #       uses: actions/setup-node@v3
+    #       with:
+    #         node-version: 16.x
+
+    #     - name: Cache node modules
+    #       uses: actions/cache@v3
+    #       with:
+    #         path: node_modules
+    #         key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+    #         restore-keys: |
+    #           ${{ runner.OS }}-build-${{ env.cache-name }}-
+    #           ${{ runner.OS }}-build-
+    #           ${{ runner.OS }}-
+
+    #     - name: Install dependencies
+    #       run: npm install
+
+    #     - run: npm run check:performance

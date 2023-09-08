@@ -1,42 +1,57 @@
 {
-  "compilerOptions": {
-    "alwaysStrict": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "lib": [
-      "es2018",
-      "dom"
+    "compilerOptions": {
+        "alwaysStrict": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
+        "lib": [
+            "ES2022",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        // "noPropertyAccessFromIndexSignature": true,
+        "outDir": "./dist-app",
+        "pretty": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "skipLibCheck": true,
+        // "module": "commonjs",
+        // "moduleResolution": "node",
+        /* Bundler mode */
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        // "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "exclude": [
+        "node_modules",
+        "src/shared/env/config.dev.ts",
+        "src/shared/env/config.test.ts",
+        "src/shared/env/config.prod.ts",
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "./dist",
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "target": "es2015",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
-  },
-  "exclude": [
-    "node_modules",
-    "src/client/env/config.dev.ts",
-    "src/client/env/config.test.ts",
-    "src/client/env/config.prod.ts",
-  ],
-  "include": [
-    "**/*.ts"
-  ],
+    "include": [
+        "**/*.ts"
+    ],
 }

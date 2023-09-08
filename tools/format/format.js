@@ -6,8 +6,6 @@
 
 let cprint = require('color-print');
 let fs = require('fs');
-let glob = require('glob');
-let minimist = require('minimist');
 let path = require('path');
 let Promise = require('bluebird');
 let torisFormat = require('toris-format');
@@ -16,8 +14,6 @@ let torisFormat = require('toris-format');
 // Constants:
 // ******************************
 
-const ARGV = minimist(process.argv.slice(2));
-
 const c_FILE_EXTENSION_HTML = 'html';
 const c_FILE_EXTENSION_CSS = 'css';
 const c_FILE_EXTENSION_SCSS = 'scss';
@@ -25,60 +21,100 @@ const c_FILE_EXTENSION_TS = 'ts';
 const c_HTML_FORMAT_RULES_CONFIG_FILE = path.resolve(__dirname, 'format-rules-html.json');
 const c_CSS_FORMAT_RULES_CONFIG_FILE = path.resolve(__dirname, 'format-rules-css.json');
 const c_TS_FORMAT_RULES_CONFIG_FILE = path.resolve(__dirname, 'format-rules-ts.json');
-const c_FIX = !!ARGV['fix'];
+
+const c_EXTERNAL_LIBS = [
+    '@angular',
+    'angular2-chartjs',
+    'bluebird',
+    'body-parser',
+    'cors',
+    'crypto',
+    'express',
+    'fast-xml-parser',
+    'fs',
+    'http',
+    'https',
+    'md5',
+    'multer',
+    'nodemailer',
+    'os',
+    'path',
+    'process',
+    'protractor',
+    'querystring',
+    'request',
+    'rxjs',
+    'sequelize',
+    'socket.io',
+    'supertest',
+    'universal-analytics',
+];
 
 // ******************************
-// Script:
+// Export Functions:
 // ******************************
 
-_listFiles('src')
-    .then((files) => formatFiles(files))
-    .catch((err) => {
-        console.error(`Formatting encountered error(s):`);
-        console.error(`${err}`);
-        process.exit(-1);
-    });
-
-// ******************************
-// Main Functions:
-// ******************************
-
-function formatFiles(filesToProcess) {
-    let filesToFormat = filesToProcess.filter(_filesFilter);
+module.exports['formatFiles'] = (in_filesToProcess, in_fix) => {
+    let filesToFormat = in_filesToProcess.filter(_filesFilter);
     if (filesToFormat.length === 1) {
         cprint.cyan('Running formatter over file: ' + filesToFormat[0]);
     } else {
         cprint.cyan('Running formatter over files');
     }
 
-    return Promise.all(filesToFormat.map((file) => _formatFile(file)))
+    return Promise.all(filesToFormat.map((file) => _formatFile(file, in_fix)))
         .then((results) => {
             const firstError = results.find((err) => !!err);
             if (firstError) {
                 throw firstError;
             }
         })
-        .then(() => _formatTsFilesWithPrettier(_getConfig(c_FILE_EXTENSION_TS)));
+        .then(() => _formatTsFilesWithPrettier(in_filesToProcess, _getConfig(c_FILE_EXTENSION_TS), in_fix));
+};
+
+// ******************************
+
+module.exports['listFiles'] = _listFiles;
+
+// ******************************
+// Helper Functions:
+// ******************************
+
+function _writeFileWithCb(in_filePath, in_fileContents, in_cbSuccess, in_cbError) {
+    var file = path.resolve(process.cwd(), in_filePath);
+    fs.writeFile(file, in_fileContents, 'utf8', (error, data) => {
+        if (error) {
+            cprint.red('Could not write to file: ' + file);
+            cprint.red('  ' + error);
+            if (in_cbError) {
+                in_cbError(error);
+            }
+        } else {
+            if (in_cbSuccess) {
+                in_cbSuccess(data);
+            }
+        }
+    });
 }
 
 // ******************************
 
-function _listFiles(folder, filter) {
+function _listFiles(in_folder, in_filter) {
     return new Promise((resolveAll) => {
-        var files = fs.readdirSync(folder);
+        var files = fs.readdirSync(in_folder);
         var fileList = [];
 
         _processFiles(files, (file, resolve) => {
-            var fullPath = folder + '/' + file;
+            var fullPath = in_folder + '/' + file;
 
             fs.stat(fullPath, (err, stats) => {
                 if (!err && stats.isDirectory()) {
-                    _listFiles(fullPath, filter).then((subFileList) => {
+                    _listFiles(fullPath, in_filter).then((subFileList) => {
                         fileList = fileList.concat(subFileList);
                         resolve();
                     });
                 } else {
-                    if (!filter || file.match(new RegExp(filter))) {
+                    if (!in_filter || file.match(new RegExp(in_filter))) {
                         fileList.push(fullPath);
                     }
                     resolve();
@@ -92,28 +128,9 @@ function _listFiles(folder, filter) {
 
 // ******************************
 
-function _writeFileWithCb(filePath, fileContents, cbSuccess, cbError) {
-    var file = path.resolve(process.cwd(), filePath);
-    fs.writeFile(file, fileContents, 'utf8', (error, data) => {
-        if (error) {
-            cprint.red('Could not write to file: ' + file);
-            cprint.red('  ' + error);
-            if (cbError) {
-                cbError(error);
-            }
-        } else {
-            if (cbSuccess) {
-                cbSuccess(data);
-            }
-        }
-    });
-}
-
-// ******************************
-
-function _processFiles(files, process) {
+function _processFiles(in_files, in_process) {
     return new Promise((resolveAll, rejectAny) =>
-        Promise.all(files.map((file) => new Promise((resolve, reject) => process(file, resolve, reject))))
+        Promise.all(in_files.map((file) => new Promise((resolve, reject) => in_process(file, resolve, reject))))
             .then(resolveAll)
             .catch(rejectAny)
     );
@@ -121,11 +138,11 @@ function _processFiles(files, process) {
 
 // ******************************
 
-function _formatFile(fileToFormat) {
+function _formatFile(in_fileToFormat, in_fix) {
     return new Promise((resolve) => {
         try {
-            let fileContents = fs.readFileSync(fileToFormat, 'utf-8');
-            let fileExtension = _getFileExtension(fileToFormat);
+            let fileContents = fs.readFileSync(in_fileToFormat, 'utf-8');
+            let fileExtension = _getFileExtension(in_fileToFormat);
             let config = _getConfig(fileExtension) || {};
             let formattedFileContents;
 
@@ -133,40 +150,40 @@ function _formatFile(fileToFormat) {
                 case c_FILE_EXTENSION_HTML:
                 case c_FILE_EXTENSION_CSS:
                 case c_FILE_EXTENSION_SCSS:
-                    formattedFileContents = torisFormat.formatFile(fileToFormat, config);
+                    formattedFileContents = torisFormat.formatFile(in_fileToFormat, config);
                     break;
 
                 case c_FILE_EXTENSION_TS:
-                    formattedFileContents = _formatTsFile(fileToFormat, config);
+                    formattedFileContents = _formatTsFile(in_fileToFormat, config);
                     break;
 
                 default:
-                    throw 'Cannot format file with extension: ' + fileExtension;
+                    throw new Error('Cannot format file with extension: ' + fileExtension);
             }
 
             if (formattedFileContents === false) {
                 // Couldn't format file
-                cprint.red('✘ ' + fileToFormat);
+                cprint.red('✘ ' + in_fileToFormat);
                 return resolve();
             }
 
             if (fileContents !== formattedFileContents) {
-                if (c_FIX) {
+                if (in_fix) {
                     // Formatting has changed
-                    cprint.yellow('✎ ' + fileToFormat + ' - Formatted');
-                    return _writeFileWithCb(fileToFormat, formattedFileContents, () => resolve());
+                    cprint.yellow('✎ ' + in_fileToFormat + ' - Formatted');
+                    return _writeFileWithCb(in_fileToFormat, formattedFileContents, () => resolve());
                 }
-                cprint.red('✘ ' + fileToFormat);
-                return resolve(new Error(`${fileToFormat} is not formatted correctly`));
+                cprint.red('✘ ' + in_fileToFormat);
+                return resolve(new Error(`${in_fileToFormat} is not formatted correctly`));
             }
             // Formatting is the same as what is already there
-            if (c_FIX) {
-                cprint.green('✔ ' + fileToFormat);
+            if (in_fix) {
+                cprint.green('✔ ' + in_fileToFormat);
             }
             return resolve();
         } catch (err) {
             // Something weird happened while trying to format file
-            cprint.red('✘ ' + fileToFormat);
+            cprint.red('✘ ' + in_fileToFormat);
             cprint.red(err.stack || err.message || err);
             return resolve(err);
         }
@@ -184,7 +201,7 @@ function _formatTsFile(in_file, in_config) {
     }
 
     if (in_config.sort_imports) {
-        fileContents = _formatTsFileImports(fileContents, in_config);
+        fileContents = _formatTsFileImports(fileContents, in_file, in_config);
     }
 
     return fileContents;
@@ -192,24 +209,48 @@ function _formatTsFile(in_file, in_config) {
 
 // ******************************
 
-function _formatTsFileImports(in_contents, in_config) {
+function _getImportRe(in_config) {
     const lineEnding = in_config.line_ending || '\n';
-    const maxImportLength = Math.max(80, in_config.line_length || 80);
+    return `^import (?:(?:(.*{[\\s\\S]+?})|([*] as [a-zA-Z0-9]+)|([a-zA-Z0-9]+)) from )?'(.*)';${lineEnding}?${lineEnding}?`;
+}
 
-    let tsContents = in_contents;
+// ******************************
 
-    let re = `^import (?:(?:(.*{[\\s\\S]+?})|([*] as [a-zA-Z0-9]+)|([a-zA-Z0-9]+)) from )?'(.*)';${lineEnding}?${lineEnding}?`;
+function _getUnamedImportKey() {
+    return 'UNNAMED-IMPORT'; // e.g.: import 'rxjs/add/operator/filter';
+}
 
-    let imports = tsContents.match(new RegExp(re, 'mg'));
-    if (!imports) {
-        return tsContents;
+// ******************************
+
+function _isInternal(in_path) {
+    return !!in_path.match(/^[.]*\/.*/);
+}
+
+// ******************************
+
+function _isExternal(in_path) {
+    if (in_path === `nodemailer/lib/mailer`) {
+        return true;
     }
-    tsContents = tsContents.replace(new RegExp(re, 'mg'), '').trim();
 
-    let unnamedImport = 'UNNAMED-IMPORT'; // e.g.: import 'rxjs/add/operator/filter';
+    if (c_EXTERNAL_LIBS.find((externalLib) => externalLib.match(in_path))) {
+        return true;
+    }
+
+    return false;
+}
+
+// ******************************
+
+function _getImportMappings(in_imports, in_file, in_config) {
+    const re = _getImportRe(in_config);
+    const unnamedImport = _getUnamedImportKey();
+    const fileFolder = path.dirname(in_file);
+    const maxDirNum = fileFolder.split('/').length;
+
     let importMappings = [];
     importMappings[unnamedImport] = [];
-    imports.forEach((importString) => {
+    in_imports.forEach((importString) => {
         let matches = importString.match(re);
         let importNames = matches[1] || matches[2] || matches[3] || unnamedImport;
         let importPath = matches[4];
@@ -227,7 +268,7 @@ function _formatTsFileImports(in_contents, in_config) {
         }
 
         if (importNames === unnamedImport) {
-            importMappings[importNames].push(importPath);
+            importMappings[unnamedImport].push(importPath);
         } else {
             importNames
                 .split(',')
@@ -242,68 +283,140 @@ function _formatTsFileImports(in_contents, in_config) {
         .filter((name) => name !== unnamedImport)
         .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
 
-    let pathImportSections = [
-        {
-            sectionTitle: 'External:',
-            pathImports: [],
-            sortByImportPath: true,
-            importPathMatch: (importPath) => !importPath.match('^[.]*/.*'),
-        },
-        {
-            sectionTitle: 'Internal:',
-            pathImports: [],
-            sortByImportName: true,
-            importPathMatch: (importPath) => importPath.match('^[.]*/.*'),
-        },
-    ];
-
-    function mapInputPath(inputName, importPath) {
-        let matchedPathImportSections =
-            pathImportSections.filter((pathImportSection) => pathImportSection.importPathMatch(importPath)) || [];
-
-        let pathImportSection = matchedPathImportSections[0];
-        if (!pathImportSection) {
-            return;
-        }
-
-        if (!pathImportSection.pathImports[importPath]) {
-            pathImportSection.pathImports[importPath] = [];
-        }
-
-        pathImportSection.pathImports[importPath].push(inputName);
-    }
+    const internalImports = {};
+    const externalImports = {};
 
     importNames.forEach((importName) => {
         let importPath = importMappings[importName];
+        let isInternal = _isInternal(importPath);
+        let isExternal = _isExternal(importPath);
 
-        let matchedPathImportSections =
-            pathImportSections.filter((pathImportSection) => pathImportSection.importPathMatch(importPath)) || [];
+        if (!isExternal) {
+            let dirNum = 0;
+            let found = false;
 
-        let pathImportSection = matchedPathImportSections[0];
-        if (!pathImportSection) {
-            return;
+            let fullPath = path.join(fileFolder, importPath);
+            if (!fs.existsSync(`${fullPath}.ts`)) {
+                while (!found && dirNum < maxDirNum) {
+                    const parentFolder = path.join(fileFolder, '../'.repeat(dirNum));
+
+                    fullPath = path.join(parentFolder, importPath);
+                    if (fs.existsSync(`${fullPath}.ts`)) {
+                        const newImportPath = path.relative(fileFolder, fullPath).replace(/\\/g, '/');
+                        cprint.yellow(`${in_file} - Correcting path "${importPath}" => "${newImportPath}"`);
+                        importPath = newImportPath;
+                        isInternal = _isInternal(importPath);
+                        found = true;
+                        break;
+                    }
+
+                    const folders = fs
+                        .readdirSync(parentFolder)
+                        .map((f) => path.join(parentFolder, f))
+                        .filter((f) => fs.statSync(f).isDirectory());
+
+                    folders.forEach((folder) => {
+                        const childPath = path.join(folder, path.basename(importPath));
+                        if (fs.existsSync(`${childPath}.ts`)) {
+                            const newImportPath = path.relative(fileFolder, childPath).replace(/\\/g, '/');
+                            cprint.yellow(`${in_file} - Correcting path "${importPath}" => "${newImportPath}"`);
+                            importPath = newImportPath;
+                            isInternal = _isInternal(importPath);
+                            found = true;
+                            return;
+                        }
+
+                        const fullPath = path.join(folder, importPath);
+                        if (fs.existsSync(`${fullPath}.ts`)) {
+                            const newImportPath = path.relative(fileFolder, fullPath).replace(/\\/g, '/');
+                            cprint.yellow(`${in_file} - Correcting path "${importPath}" => "${newImportPath}"`);
+                            importPath = newImportPath;
+                            isInternal = _isInternal(importPath);
+                            found = true;
+                            return;
+                        }
+                    });
+
+                    dirNum++;
+                }
+
+                if (!found && isInternal) {
+                    throw new Error(`Path doesn't exist: ${importPath}`);
+                }
+            }
+        }
+        if (importPath.match('^stores/.*')) {
+            throw new Error(`Stores path wasn't corrected: ${importPath}`)
+        }
+        if (importPath.match('^services/.*')) {
+            throw new Error(`Services path wasn't corrected: ${importPath}`)
         }
 
-        if (!pathImportSection.pathImports[importPath]) {
-            pathImportSection.pathImports[importPath] = [];
+        if (isInternal) {
+            if (!internalImports[importPath]) {
+                internalImports[importPath] = [];
+            }
+            internalImports[importPath].push(importName);
+        } else {
+            if (!externalImports[importPath]) {
+                externalImports[importPath] = [];
+            }
+            externalImports[importPath].push(importName);
         }
-
-        pathImportSection.pathImports[importPath].push(importName);
     });
-    importMappings[unnamedImport].forEach((importPath) => mapInputPath(unnamedImport, importPath));
+
+    importMappings[unnamedImport].forEach((importPath) => {
+        const importName = unnamedImport;
+        const isInternal = importPath.match('^[.]*/.*');
+        if (isInternal) {
+            if (!internalImports[importPath]) {
+                internalImports[importPath] = [];
+            }
+            internalImports[importPath].push(importName);
+        } else {
+            if (!externalImports[importPath]) {
+                externalImports[importPath] = [];
+            }
+            externalImports[importPath].push(importName);
+        }
+    });
+
+    const pathImportSections = [
+        {
+            isInternal: false,
+            pathImports: externalImports,
+            sortByImportPath: true,
+        },
+        {
+            isInternal: true,
+            pathImports: internalImports,
+            sortByImportName: true,
+        },
+    ];
+
+    return pathImportSections;
+}
+
+// ******************************
+
+function _getImportContents(in_imports, in_file, in_config) {
+    const lineEnding = in_config.line_ending || '\n';
+    const maxImportLength = Math.max(80, in_config.line_length || 80);
+    const unnamedImport = _getUnamedImportKey();
+
+    let pathImportSections = _getImportMappings(in_imports, in_file, in_config);
 
     let importContents = '';
 
     pathImportSections.forEach((pathImportSection) => {
-        if (!Object.keys(pathImportSection.pathImports).length) {
+        let importPathKeys = Object.keys(pathImportSection.pathImports);
+        if (!importPathKeys.length) {
             return;
         }
 
         if (importContents.length) {
             importContents += lineEnding;
         }
-
-        let importPathKeys = Object.keys(pathImportSection.pathImports);
 
         if (pathImportSection.sortByImportPath) {
             importPathKeys.sort();
@@ -331,21 +444,16 @@ function _formatTsFileImports(in_contents, in_config) {
                 }
             }
 
-            const nonDestructuredImports = importNames
-                .filter((importName) => importName.match(/:DEFAULT/))
-                .map((importName) => importName.replace(/:DEFAULT/, ''));
-
+            const nonDestructuredImports = importNames.filter((importName) => importName.match(/:DEFAULT/)).map((importName) => importName.replace(/:DEFAULT/, ''));
             const destructuredImports = importNames.filter((importName) => !importName.match(/:DEFAULT/));
 
-            const fullImportPath = `import ${
-                nonDestructuredImports.length ? `${nonDestructuredImports.join(', ')}, ` : ''
-            }{ ${destructuredImports.join(', ')} } from '${importPath}';`;
+            const nonDestructuredImportsStr = nonDestructuredImports.length ? `${nonDestructuredImports.join(', ')}, ` : '';
+
+            const fullImportPath = `import ${nonDestructuredImportsStr}{ ${destructuredImports.join(', ')} } from '${importPath}';`;
 
             if (fullImportPath.length > maxImportLength) {
                 importLines.push(
-                    `import ${
-                        nonDestructuredImports.length ? `${nonDestructuredImports.join(', ')}, ` : ''
-                    }{${lineEnding}    ${destructuredImports
+                    `import ${nonDestructuredImportsStr}{${lineEnding}    ${destructuredImports
                         .filter((importName) => !importName.match(/:DEFAULT/))
                         .join(`,${lineEnding}    `)},${lineEnding}} from '${importPath}';`
                 );
@@ -362,6 +470,25 @@ function _formatTsFileImports(in_contents, in_config) {
         importContents += importLines.join(lineEnding) + lineEnding;
     });
 
+    return importContents;
+}
+
+// ******************************
+
+function _formatTsFileImports(in_contents, in_file, in_config) {
+    const lineEnding = in_config.line_ending || '\n';
+    const re = _getImportRe(in_config);
+
+    let tsContents = in_contents;
+
+    let imports = tsContents.match(new RegExp(re, 'mg'));
+    if (!imports) {
+        return tsContents;
+    }
+    tsContents = tsContents.replace(new RegExp(re, 'mg'), '').trim();
+
+    let importContents = _getImportContents(imports, in_file, in_config);
+
     if (!tsContents) {
         return importContents;
     }
@@ -371,34 +498,35 @@ function _formatTsFileImports(in_contents, in_config) {
 
 // ******************************
 
-function _formatTsFilesWithPrettier(in_config) {
+function _formatTsFilesWithPrettier(in_files, in_config, in_fix) {
     if (!in_config.run_prettier) return;
 
     const tabWidth = Math.max(2, in_config.tab_width || 4);
     const singleQuote = in_config.quote_style || 'single' === 'single';
     const lineLength = Math.max(80, in_config.line_length || 80);
-    const globPath = './src/**/*.ts';
-
-    const files = glob.sync(globPath);
-    if (!files.length) {
-        return;
-    }
 
     let args = [`--tab-width ${tabWidth}`, `${singleQuote ? `--single-quote` : ''}`, `--print-width ${lineLength}`];
-    if (c_FIX) {
+    if (in_fix) {
         args.push('--write');
+    } else {
+        args.push('--check');
     }
-    args.push(globPath);
+
+    if (in_files.length > 20) {
+        args.push('src/**/*.ts');
+    } else {
+        args = args.concat(in_files.map((f) => `"${f}"`));
+    }
 
     let child_process = require('child_process');
-    child_process.execSync(`yarn prettier ${args.join(' ')}`, { stdio: 'inherit' });
+    child_process.execSync(`npx prettier ${args.join(' ')}`, { stdio: 'inherit' });
     return;
 }
 
 // ******************************
 
-function _getConfig(fileExtension) {
-    switch (fileExtension) {
+function _getConfig(in_fileExtension) {
+    switch (in_fileExtension) {
         case c_FILE_EXTENSION_HTML:
             return require(c_HTML_FORMAT_RULES_CONFIG_FILE);
 
@@ -413,9 +541,9 @@ function _getConfig(fileExtension) {
 
 // ******************************
 
-function _getFileExtension(file) {
+function _getFileExtension(in_file) {
     try {
-        let fileParts = file.match(/.*\.(.*)$/);
+        let fileParts = in_file.match(/.*\.(.*)$/);
         let fileExtension = fileParts[1].trim().toLowerCase();
         return fileExtension;
     } catch (err) {

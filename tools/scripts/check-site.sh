@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e # Bail on first error
-set -x # Print out all commands
+# set -x # Print out all commands
 source "$(dirname "$0")/_lib.sh"
 
 #
@@ -44,15 +44,18 @@ if [[ ! "${APP_GA_TRACKING_ID}" ]]; then APP_GA_TRACKING_ID=""; fi
 APP_TRELLO_BOARD_ID=$npm_package_config_trello_board_id
 if [[ ! "${APP_TRELLO_BOARD_ID}" ]]; then APP_TRELLO_BOARD_ID=""; fi
 
-MODE="${1}"
+ENV_TYPE=$(get_env_type "${1}")
+ENV_TYPE_FULL=$(get_env_type_full "${ENV_TYPE}")
 
-ENV_TYPE="dev"
-PERSIST_DATA="false"
-RESPAWN="false"
+function _run_tests () {
+    if [[ "${ENV_TYPE}" == "prod" ]]; then
+    protractor ./src/tests/check/prod-site/protractor.conf.js
+    elif [[ "${ENV_TYPE}" == "test" ]]; then
+        protractor ./src/tests/check/test-site/protractor.conf.js
+    fi
+}
 
-TEST_HTTPS_PORT=$(get_test_https_port "${ENV_TYPE}" "${APP_PORT_IDX}")
-
-install_certificates "${ENV_TYPE}" "${APP_HOST}" ""
+alert_user "${APP_NAME}" "Starting site check for ${ENV_TYPE_FULL} now..."
 
 set_config \
     "${ENV_TYPE}" \
@@ -67,49 +70,23 @@ set_config \
     "${APP_GA_TRACKING_ID}" \
     "${APP_TRELLO_BOARD_ID}"
 
-sleep 3
-
-launch_server \
-    "${ENV_TYPE}" \
-    "${APP_HOST}" \
-    "${APP_PORT_IDX}" \
-    "${PERSIST_DATA}" \
-    "${RESPAWN}"
-
-function _run_tests() {
-    if [[ "${MODE}" == "ci" ]]; then
-        ng e2e --webdriver-update=false --protractor-config "./src/tests/e2e/protractor.ci.conf.js" --port "${TEST_HTTPS_PORT}"
-    else
-        ng e2e --webdriver-update=false --port "${TEST_HTTPS_PORT}"
-    fi
-}
-
 set +e
 
 _run_tests
 
 if [[ $? == 1 ]]; then
-    alert_user "${APP_NAME}" "E2E tests failed for: ${ENV_TYPE}"
+    alert_user "${APP_NAME}" "Site checks failed for: ${ENV_TYPE}"
     echo -n "Press enter to try again..."; read
     _run_tests
 fi
 
 if [[ $? == 1 ]]; then
     set -e
-    alert_user "${APP_NAME}" "E2E tests failed for: ${ENV_TYPE}"
+    alert_user "${APP_NAME}" "Site checks failed for: ${ENV_TYPE}"
     echo -n "Press enter to try again..."; read
     _run_tests
 fi
 
-set +e #Ignore errors
-
-terminate_server \
-    "${ENV_TYPE}" \
-    "${APP_HOST}" \
-    "${APP_PORT_IDX}"
-
-set -e
-
 restore_config
 
-echo "Done!"
+alert_user "${APP_NAME}" "Site check for ${ENV_TYPE_FULL} complete!"

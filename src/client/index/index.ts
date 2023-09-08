@@ -1,11 +1,13 @@
 import { v4 as uuidV4 } from 'uuid';
 
+import '../../assets/favicon/favicon-16x16.png';
+import '../../assets/favicon/favicon-32x32.png';
+import '../../assets/favicon/favicon-96x96.png';
 import '../css/fontawesome/brands.css';
 import '../css/fontawesome/fontawesome.css';
 import '../css/fontawesome/solid.css';
 import '../css/js-content.css';
 import '../css/js-footer.css';
-import '../imports/favicons';
 import './index.css';
 
 // ******************************
